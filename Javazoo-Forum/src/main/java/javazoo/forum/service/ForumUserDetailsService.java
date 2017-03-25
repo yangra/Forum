@@ -1,7 +1,5 @@
 package javazoo.forum.service;
-/**
- * Created by danie on 3/24/2017.
- */
+
 
 import javazoo.forum.entity.User;
 import javazoo.forum.repository.UserRepository;
@@ -26,8 +24,8 @@ public class ForumUserDetailsService implements UserDetailsService{
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
-        User user = userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+        User user = userRepository.findByUsername(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("Invalid User");
@@ -43,7 +41,7 @@ public class ForumUserDetailsService implements UserDetailsService{
                     .security
                     .core
                     .userdetails
-                    .User(user.getEmail(), user.getPassword(), grantedAuthorities);
+                    .User(user.getUsername(), user.getPassword(), grantedAuthorities);
         }
 
     }

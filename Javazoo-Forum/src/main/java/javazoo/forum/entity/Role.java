@@ -14,6 +14,11 @@ public class Role {
 
     private Integer id;
     private String name;
+    private Set<User> users;
+
+    public Role(){
+        this.users = new HashSet<>();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +29,7 @@ public class Role {
     public void setId(Integer id) {
         this.id = id;
     }
+
     @Column(name = "name", nullable = false)
     public String getName() {
         return name;
@@ -33,10 +39,6 @@ public class Role {
         this.name = name;
     }
 
-    private Set<User> users;
-    public Role(){
-        this.users = new HashSet<>();
-    }
     @ManyToMany(mappedBy =  "roles")
     public Set<User> getUsers() {
         return users;

@@ -1,8 +1,5 @@
 package javazoo.forum.entity;
 
-/**
- * Created by danie on 3/24/2017.
- */
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -12,17 +9,23 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
     private Integer id;
+    private String username;
+    private String password;
     private String email;
     private String fullName;
-    private String password;
-    // private String userName;
+    private Set<Role> roles;
 
-    public User(String email, String fullName, String password){
+    public User(String username, String email, String fullName, String password){
+        this.username = username;
         this.email = email;
         this.password = password;
         this.fullName = fullName;
 
         this.roles = new HashSet<>();
+    }
+
+    public User(){
+
     }
 
     @Id
@@ -34,6 +37,16 @@ public class User {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    @Column(name="username",length = 30, unique = true, nullable = false)
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     @Column(name = "email", unique = true, nullable = false)
     public String getEmail() {
         return email;
@@ -42,6 +55,7 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
+
     @Column(name = "fullName", nullable = false)
     public String getFullName() {
         return fullName;
@@ -50,6 +64,7 @@ public class User {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
+
     @Column(name="password",length = 60,nullable = false)
     public String getPassword() {
         return password;
@@ -59,11 +74,6 @@ public class User {
         this.password = password;
     }
 
-    public User(){
-
-    }
-    private Set<Role> roles;
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles")
     public Set<Role> getRoles() {
@@ -72,5 +82,9 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(Role role){
+        this.roles.add(role);
     }
 }
