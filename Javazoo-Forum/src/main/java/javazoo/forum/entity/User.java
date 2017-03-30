@@ -2,6 +2,7 @@ package javazoo.forum.entity;
 
 
 import javax.persistence.*;
+import java.lang.invoke.SerializedLambda;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ public class User {
     private String fullName;
     private Set<Role> roles;
     private Set<Question> questions;
+    private Set<Answer> answers;
 
     public User(String username, String email, String fullName, String password){
         this.username = username;
@@ -24,6 +26,7 @@ public class User {
 
         this.roles = new HashSet<>();
         this.questions = new HashSet<>();
+        this.answers = new HashSet<>();
     }
 
     public User(){
@@ -98,4 +101,15 @@ public class User {
     public void setQuestions(Set<Question> questions) {
         this.questions = questions;
     }
+
+    @OneToMany(mappedBy = "author")
+    public Set<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(Set<Answer> answers) {
+        this.answers = answers;
+    }
+
+
 }
