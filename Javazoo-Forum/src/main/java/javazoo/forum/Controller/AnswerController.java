@@ -41,8 +41,7 @@ public class AnswerController {
         User userEntity = this.userRepository.findByUsername(user.getUsername());
 
         Answer answerEntity = new Answer(
-                answerBindingModel.getTitle(),
-                answerBindingModel.getContent(),
+              answerBindingModel.getContent(),
                 userEntity
         );
 

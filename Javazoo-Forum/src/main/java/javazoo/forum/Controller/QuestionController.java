@@ -25,7 +25,6 @@ public class QuestionController {
     @Autowired
     private AnswersRepository answersRepository;
 
-
     @Autowired
     private QuestionRepository questionRepository;
 

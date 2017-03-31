@@ -14,16 +14,13 @@ import java.util.Date;
 @Table(name = "answers")
 public class Answer {
     private Integer id;
-    private String title;
     private String content;
     private User author;
     private Date creationDate;
 
-    public Answer(String title, String content, User author){
-        this.title = title;
+    public Answer(String content, User author){
         this.content = content;
         this.author = author;
-
         this.creationDate = new Date();
     }
 
@@ -38,15 +35,6 @@ public class Answer {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    @Column(nullable = false)
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     @Column(columnDefinition = "text", nullable = false)
