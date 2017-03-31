@@ -43,56 +43,40 @@
             </th:block>
         </div>
 
-        <!--<section class="col-md-9 container body-content">-->
-            <!--<div class="row">-->
-                <!--<th:block th:each="answer:${answers}">-->
-                    <!--<div class="col-md-9 col-md-offset-2">-->
-                        <!--<article>-->
-                            <!--<div class="panel panel-primary">-->
-                                <!--<div class="panel-heading">-->
-                                    <!--<h3 class="panel-title" th:text="${answer.title}"></h3></a>-->
-                                <!--</div>-->
-                                <!--<div class="panel-body">-->
-                                    <!--<div class="col-md-4">-->
-                                        <!--<a href="#">-->
-                                            <!--Category of the post-->
-                                        <!--</a>-->
-                                        <!--<br/><br/>-->
-                                        <!--Answers: 43-->
-                                    <!--</div>-->
-                                    <!--<div class="col-md-4 ">-->
-                                        <!--Created by:<br/>-->
-                                        <!--<span th:text="${answer.author.username}"></span><br/>-->
-                                        <!--<span th:text="${answer.creationDate}"></span>-->
-                                    <!--</div>-->
-                                    <!--<div class="col-md-4 ">-->
-                                        <!--Last activity:<br/>-->
-                                        <!--author...<br/>-->
-                                        <!--24/05/2016-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-                    <!--</div>-->
-                <!--</th:block>-->
-            <!--</div>-->
-        <!--</section>-->
+        <br/>
+        <br/>
 
+        <div class="col-md-9 col-md-offset-2" >
         <th:block th:each="answer:${answers}">
             <div class="panel panel-primary">
                 <div class="panel-body">
                     <div class="col-md-2" style="border-right: 1px solid lightgray">
                         <span th:text="${answer.author.username}"></span><br/>
-                        <span th:text="${answer.creationDate}"></span>
 
                     </div>
                     <article class="col-md-10">
                         <span th:text="${answer.content}"></span><br/>
 
                     </article>
+                    <div class="col-md-2" style="border-right: 1px solid lightgray">
+                        <span th:text="${answer.creationDate}"></span>
+
+                    </div>
+
+
+                    <div class="pull-right">
+                        <th:block sec:authorize="isAuthenticated()">
+                            <a class="btn btn-success btn-xs"
+                               th:href="@{/answer/edit/{id}(id = ${answer.id})}">Edit</a>
+                        </th:block>
+                    </div>
+
+
+
                 </div>
             </div>
         </th:block>
+        </div>
 
 
 

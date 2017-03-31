@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -50,6 +51,34 @@ public class AnswerController {
         return "redirect:/";
     }
 
+    @GetMapping("/answer/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String edit(@PathVariable Integer id, Model model){
 
+        if(!this.answersRepository.exists(id)){
+            return "redirect:/";
+        }
+        Answer answer = this.answersRepository.findOne(id);
+        model.addAttribute("view", "answer/edit");
+        model.addAttribute("answer", answer);
+
+        return "base-layout";
+    }
+    @PostMapping("answer/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String editProcess(@PathVariable Integer id, AnswerBindingModel answerBindingModel){
+        if (!this.answersRepository.exists(id)){
+            return "redirect:/";
+        }
+
+        Answer answer = this.answersRepository.findOne(id);
+
+        answer.setContent(answerBindingModel.getContent());
+
+
+        this.answersRepository.saveAndFlush(answer);
+
+        return "redirect:/answer/" + answer.getId();
+    }
 
 }
