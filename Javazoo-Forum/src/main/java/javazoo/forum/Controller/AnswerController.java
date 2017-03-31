@@ -46,6 +46,8 @@ public class AnswerController {
                 userEntity
         );
 
+        this.answersRepository.saveAndFlush(answerEntity);
+
         return "redirect:/";
     }
 
