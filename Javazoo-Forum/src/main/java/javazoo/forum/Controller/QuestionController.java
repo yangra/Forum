@@ -1,4 +1,4 @@
-package javazoo.forum.Controller;
+package javazoo.forum.controller;
 
 import javazoo.forum.bindingModel.QuestionBindingModel;
 import javazoo.forum.entity.Answer;
@@ -66,12 +66,11 @@ public class QuestionController {
 
         Question question = this.questionRepository.findOne(id);
 
-        List<Answer> answers = this.answersRepository.findAll();
+        List<Answer> answers = this.answersRepository.findByQuestion(question);
 
         model.addAttribute("question", question);
         model.addAttribute("view", "question/details");
         model.addAttribute("answers", answers);
-
 
         return "base-layout";
     }

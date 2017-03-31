@@ -1,7 +1,7 @@
 <main>
     <div class="container body-content span=8 offset=2">
         <div class="well">
-            <form class="form-horizontal" th:action="@{/answer/edit/{id}(id=${answer.id})}" method="POST">
+            <form class="form-horizontal" th:action="@{/question/{qId}/answer/edit/{id}(id=${answer.id},qId=${qId})}" method="POST">
                 <fieldset>
                     <legend>Edit Answer</legend>
 
@@ -15,7 +15,7 @@
 
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-4">
-                            <a class="btn btn-default" th:href="@{/answer/{id}(id = ${answer.id})}">Cancel</a>
+                            <a class="btn btn-default" th:href="@{/question/{qId}(qId = ${qId})}">Cancel</a>
                             <input type="submit" class="btn btn-success" value="Edit"/>
                         </div>
                     </div>

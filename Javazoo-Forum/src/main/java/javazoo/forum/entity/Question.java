@@ -4,6 +4,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="questions")
@@ -13,6 +15,8 @@ public class Question {
     private String content;
     private User author;
     private Date creationDate;
+    private Set<Answer> answers;
+
 
     public Question(String title, String content, User author){
         this.title = title;
@@ -20,6 +24,8 @@ public class Question {
         this.author = author;
 
         this.creationDate = new Date();
+        this.answers = new HashSet<>();
+
     }
 
     public Question(){    }
@@ -70,5 +76,14 @@ public class Question {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    @OneToMany(mappedBy = "question")
+    public Set<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(Set<Answer> answers) {
+        this.answers = answers;
     }
 }

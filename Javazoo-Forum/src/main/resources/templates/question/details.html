@@ -1,5 +1,5 @@
 <main>
-    <div class="col-md-9 col-md-offset-2" >
+    <div class="col-md-9 col-md-offset-2">
         <article>
             <div class="panel panel-primary">
                 <div class="panel-heading">
@@ -18,7 +18,8 @@
                 <div class="panel-footer ">
                     <div class="row">
                         <div class="col-md-2">
-                            <a class="btn btn-warning btn-sm" href="../answer/create.html">Answer &raquo;</a>
+                            <a class="btn btn-warning btn-sm"
+                               th:href="@{/question/{qId}/answer/create(qId=${question.id})}">Answer &raquo;</a>
                         </div>
                         <div class="col-md-5">
                             Tags:
@@ -38,46 +39,43 @@
 
         <div class="pull-right">
             <th:block sec:authorize="isAuthenticated()">
-            <a class="btn btn-success btn-xs"
-               th:href="@{/question/edit/{id}(id = ${question.id})}">Edit</a>
+                <a class="btn btn-success btn-xs"
+                   th:href="@{/question/edit/{id}(id = ${question.id})}">Edit</a>
             </th:block>
         </div>
 
         <br/>
         <br/>
 
-        <div class="col-md-9 col-md-offset-2" >
-        <th:block th:each="answer:${answers}">
-            <div class="panel panel-primary">
-                <div class="panel-body">
-                    <div class="col-md-2" style="border-right: 1px solid lightgray">
-                        <span th:text="${answer.author.username}"></span><br/>
+        <div class="col-md-9 col-md-offset-2">
+            <th:block th:each="answer:${answers}">
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <div class="col-md-2" style="border-right: 1px solid lightgray">
+                            <span th:text="${answer.author.username}"></span><br/>
+
+                        </div>
+                        <article class="col-md-10">
+                            <span th:text="${answer.content}"></span><br/>
+
+                        </article>
+                        <div class="col-md-2" style="border-right: 1px solid lightgray">
+                            <span th:text="${answer.creationDate}"></span>
+
+                        </div>
+
+
+                        <div class="pull-right">
+                            <th:block sec:authorize="isAuthenticated()">
+                                <a class="btn btn-success btn-xs"
+                                   th:href="@{/question/{qId}/answer/edit/{id}(id = ${answer.id}, qId = ${question.id})}">Edit</a>
+                            </th:block>
+                        </div>
 
                     </div>
-                    <article class="col-md-10">
-                        <span th:text="${answer.content}"></span><br/>
-
-                    </article>
-                    <div class="col-md-2" style="border-right: 1px solid lightgray">
-                        <span th:text="${answer.creationDate}"></span>
-
-                    </div>
-
-
-                    <div class="pull-right">
-                        <th:block sec:authorize="isAuthenticated()">
-                            <a class="btn btn-success btn-xs"
-                               th:href="@{/answer/edit/{id}(id = ${answer.id})}">Edit</a>
-                        </th:block>
-                    </div>
-
-
-
                 </div>
-            </div>
-        </th:block>
+            </th:block>
         </div>
-
 
 
     </div>

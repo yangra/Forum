@@ -1,7 +1,7 @@
 <main>
     <div class="container body-content span=8 offset=2">
         <div class="well">
-            <form class="form-horizontal" th:action="@{/answer/create}" method="POST">
+            <form class="form-horizontal" th:action="@{/question/{qId}/answer/create(qId=${qId})}" method="POST">
                 <fieldset>
                     <legend>New Answer</legend>
 
@@ -15,7 +15,7 @@
 
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-4">
-                            <a class="btn btn-default" th:href="@{/}">Cancel</a>
+                            <a class="btn btn-default" th:href="@{/question/{qId}(qId = ${qId})}">Cancel</a>
                             <input type="submit" class="btn btn-primary" value="Submit"/>
                         </div>
                     </div>

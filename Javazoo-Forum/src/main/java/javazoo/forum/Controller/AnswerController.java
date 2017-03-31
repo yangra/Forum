@@ -1,9 +1,11 @@
-package javazoo.forum.Controller;
+package javazoo.forum.controller;
 
 import javazoo.forum.bindingModel.AnswerBindingModel;
 import javazoo.forum.entity.Answer;
+import javazoo.forum.entity.Question;
 import javazoo.forum.entity.User;
 import javazoo.forum.repository.AnswersRepository;
+import javazoo.forum.repository.QuestionRepository;
 import javazoo.forum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,38 +24,42 @@ public class AnswerController {
     private AnswersRepository answersRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
 
-    @GetMapping("/answer/create")
+    @GetMapping("question/{qId}/answer/create")
     @PreAuthorize("isAuthenticated()")
-    public String create(Model model){
+    public String create(Model model, @PathVariable Integer qId){
         model.addAttribute("view", "answer/create");
-
+        model.addAttribute("qId", qId);
         return "base-layout";
 
     }
 
-    @PostMapping("/answer/create")
+    @PostMapping("question/{qId}/answer/create")
     @PreAuthorize("isAuthenticated()")
-    public String createProcess(AnswerBindingModel answerBindingModel){
+    public String createProcess(AnswerBindingModel answerBindingModel, @PathVariable Integer qId){
 
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
 
         User userEntity = this.userRepository.findByUsername(user.getUsername());
+        Question questionEntity = this.questionRepository.findOne(qId);
 
         Answer answerEntity = new Answer(
               answerBindingModel.getContent(),
-                userEntity
+                userEntity,
+                questionEntity
         );
 
         this.answersRepository.saveAndFlush(answerEntity);
 
-        return "redirect:/";
+        return "redirect:/question/{qId}";
     }
 
-    @GetMapping("/answer/edit/{id}")
+    @GetMapping("question/{qId}/answer/edit/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String edit(@PathVariable Integer id, Model model){
+    public String edit(@PathVariable Integer id,@PathVariable Integer qId, Model model){
 
         if(!this.answersRepository.exists(id)){
             return "redirect:/";
@@ -61,14 +67,14 @@ public class AnswerController {
         Answer answer = this.answersRepository.findOne(id);
         model.addAttribute("view", "answer/edit");
         model.addAttribute("answer", answer);
-
+        model.addAttribute("qId", qId);
         return "base-layout";
     }
-    @PostMapping("answer/edit/{id}")
+    @PostMapping("question/{qId}/answer/edit/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String editProcess(@PathVariable Integer id, AnswerBindingModel answerBindingModel){
+    public String editProcess(@PathVariable Integer id, @PathVariable Integer qId, AnswerBindingModel answerBindingModel){
         if (!this.answersRepository.exists(id)){
-            return "redirect:/";
+            return "redirect:/question/{qId}";
         }
 
         Answer answer = this.answersRepository.findOne(id);
@@ -78,7 +84,7 @@ public class AnswerController {
 
         this.answersRepository.saveAndFlush(answer);
 
-        return "redirect:/answer/" + answer.getId();
+        return "redirect:/question/{qId}";
     }
 
 }

@@ -33,7 +33,7 @@
         <div class="pull-right">
             <th:block sec:authorize="isAuthenticated()">
                 <a class="btn btn-success btn-xs"
-                   th:href="@{/answer/edit/{id}(id = ${answer.id})}">Edit</a>
+                   th:href="@{/question/{qId}/answer/edit/{id}(id = ${answer.id}, qId = {qId})}">Edit</a>
             </th:block>
         </div>
     </div>

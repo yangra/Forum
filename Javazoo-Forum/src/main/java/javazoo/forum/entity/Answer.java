@@ -17,11 +17,15 @@ public class Answer {
     private String content;
     private User author;
     private Date creationDate;
+    private Question question;
 
-    public Answer(String content, User author){
+
+
+    public Answer(String content, User author, Question question){
         this.content = content;
         this.author = author;
         this.creationDate = new Date();
+        this.question = question;
     }
 
     public Answer(){    }
@@ -63,5 +67,15 @@ public class Answer {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    @ManyToOne()
+    @JoinColumn(nullable = false, name = "questionId")
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
     }
 }
