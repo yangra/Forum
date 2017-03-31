@@ -1,8 +1,10 @@
 package javazoo.forum.Controller;
 
 import javazoo.forum.bindingModel.QuestionBindingModel;
+import javazoo.forum.entity.Answer;
 import javazoo.forum.entity.Question;
 import javazoo.forum.entity.User;
+import javazoo.forum.repository.AnswersRepository;
 import javazoo.forum.repository.QuestionRepository;
 import javazoo.forum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class QuestionController {
+
+    @Autowired
+    private AnswersRepository answersRepository;
+
 
     @Autowired
     private QuestionRepository questionRepository;
@@ -59,8 +67,12 @@ public class QuestionController {
 
         Question question = this.questionRepository.findOne(id);
 
+        List<Answer> answers = this.answersRepository.findAll();
+
         model.addAttribute("question", question);
         model.addAttribute("view", "question/details");
+        model.addAttribute("answers", answers);
+
 
         return "base-layout";
     }
@@ -96,4 +108,6 @@ public class QuestionController {
 
         return "redirect:/question/" + question.getId();
     }
+
+
 }

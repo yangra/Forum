@@ -1,6 +1,10 @@
 package javazoo.forum.entity;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -63,6 +67,8 @@ public class Answer {
         this.author = author;
     }
 
+    @Column
+    @Type(type = "timestamp")
     public Date getCreationDate() {
         return creationDate;
     }
