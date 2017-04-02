@@ -9,7 +9,8 @@ Question
 	*Announcements Closed questions
 	Admin tools for Questions - Edit, Delete, Lock Sticky
 	Search by tag
-	Show by category
+	!!! add DEFAULT category!
+	Show by category 
 
 Answers
 	Editing and *Quoting
@@ -17,7 +18,7 @@ Answers
 	Admin tools for Posts - Edit, Delete
 
 Members
-	Member profiles
+	Member profiles - edit, add Avatar/Picture, *delete profile?
 	*Member List with Search Tool
 	*Member Post Search
 	*Points System - Receive Points for Posting New Topics, Replies, proposing a Answer
