@@ -100,7 +100,7 @@ public class AnswerController {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
 
-        User userEntity = this.userRepository.findByEmail(user.getUsername());
+        User userEntity = this.userRepository.findByUsername(user.getUsername());
 
         return userEntity.isAdmin() || userEntity.isAuthor(answer);
     }

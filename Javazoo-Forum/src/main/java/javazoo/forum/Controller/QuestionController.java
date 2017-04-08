@@ -132,7 +132,7 @@ public class QuestionController {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
 
-        User userEntity = this.userRepository.findByEmail(user.getUsername());
+        User userEntity = this.userRepository.findByUsername(user.getUsername());
 
         return userEntity.isAdmin() || userEntity.isAuthor(question);
     }
