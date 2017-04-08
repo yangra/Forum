@@ -65,6 +65,11 @@ public class AnswerController {
             return "redirect:/";
         }
         Answer answer = this.answersRepository.findOne(id);
+
+        if(!isUserAuthorOrAdmin(answer)){
+            return "redirect:/question/"+qId;
+        }
+
         model.addAttribute("view", "answer/edit");
         model.addAttribute("answer", answer);
         model.addAttribute("qId", qId);
@@ -78,6 +83,10 @@ public class AnswerController {
         }
 
         Answer answer = this.answersRepository.findOne(id);
+
+        if(!isUserAuthorOrAdmin(answer)){
+            return "redirect:/question/"+qId;
+        }
 
         answer.setContent(answerBindingModel.getContent());
 

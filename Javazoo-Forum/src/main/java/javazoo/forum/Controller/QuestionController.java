@@ -9,6 +9,7 @@ import javazoo.forum.repository.QuestionRepository;
 import javazoo.forum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -64,9 +65,21 @@ public class QuestionController {
             return "redirect:/";
         }
 
+        if(!(SecurityContextHolder.getContext().getAuthentication()
+                instanceof AnonymousAuthenticationToken)){
+
+            UserDetails principal = (UserDetails) SecurityContextHolder.getContext()
+                    .getAuthentication().getPrincipal();
+
+            User entityUser = this.userRepository.findByUsername(principal.getUsername());
+
+            model.addAttribute("user", entityUser);
+        }
+
         Question question = this.questionRepository.findOne(id);
 
         List<Answer> answers = this.answersRepository.findByQuestion(question);
+
 
         model.addAttribute("question", question);
         model.addAttribute("view", "question/details");
@@ -84,6 +97,10 @@ public class QuestionController {
 
         Question question = this.questionRepository.findOne(id);
 
+        if(!isUserAuthorOrAdmin(question)){
+            return "redirect:/question/"+id;
+        }
+
         model.addAttribute("view", "question/edit");
         model.addAttribute("question", question);
 
@@ -98,6 +115,10 @@ public class QuestionController {
         }
 
         Question question = this.questionRepository.findOne(id);
+
+        if(!isUserAuthorOrAdmin(question)){
+            return "redirect:/question/"+id;
+        }
 
         question.setContent(questionBindingModel.getContent());
         question.setTitle(questionBindingModel.getTitle());

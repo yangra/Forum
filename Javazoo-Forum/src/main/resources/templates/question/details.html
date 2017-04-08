@@ -15,11 +15,13 @@
                     </div>
 
                 </div>
-                <div class="panel-footer ">
+                <div class="panel-footer">
                     <div class="row">
                         <div class="col-md-2">
-                            <a class="btn btn-warning btn-sm"
-                               th:href="@{/question/{qId}/answer/create(qId=${question.id})}">Answer &raquo;</a>
+                            <th:block sec:authorize="isAuthenticated()">
+                                <a class="btn btn-warning btn-sm"
+                                   th:href="@{/question/{qId}/answer/create(qId=${question.id})}">Answer &raquo;</a>
+                            </th:block>
                         </div>
                         <div class="col-md-5">
                             Tags:
@@ -38,7 +40,7 @@
 
 
         <div class="pull-right">
-            <th:block sec:authorize="isAuthenticated()">
+            <th:block sec:authorize="isAuthenticated()" th:if="${user.isAdmin() OR user.isAuthor(question)}">
                 <a class="btn btn-success btn-xs"
                    th:href="@{/question/edit/{id}(id = ${question.id})}">Edit</a>
             </th:block>
@@ -66,7 +68,8 @@
 
 
                         <div class="pull-right">
-                            <th:block sec:authorize="isAuthenticated()">
+                            <th:block sec:authorize="isAuthenticated()"
+                                      th:if="${user.isAdmin() OR user.isAuthor(answer)}">
                                 <a class="btn btn-success btn-xs"
                                    th:href="@{/question/{qId}/answer/edit/{id}(id = ${answer.id}, qId = ${question.id})}">Edit</a>
                             </th:block>
