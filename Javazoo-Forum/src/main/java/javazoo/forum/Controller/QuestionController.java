@@ -107,12 +107,12 @@ public class QuestionController {
         return "redirect:/question/" + question.getId();
     }
 
-//    private boolean isUserAuthorOrAdmin(Question question) {
-//        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-//                .getAuthentication().getPrincipal();
-//
-//        User userEntity = this.userRepository.findByEmail(user.getUsername());
-//
-//        return userEntity.isAdmin() || userEntity.isAuthor(question);
-//    }
+    private boolean isUserAuthorOrAdmin(Question question) {
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+
+        User userEntity = this.userRepository.findByEmail(user.getUsername());
+
+        return userEntity.isAdmin() || userEntity.isAuthor(question);
+    }
 }

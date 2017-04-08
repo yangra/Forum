@@ -87,13 +87,13 @@ public class AnswerController {
         return "redirect:/question/{qId}";
     }
 
-//    private boolean isUserAuthorOrAdmin(Answer answer) {
-//        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
-//                .getAuthentication().getPrincipal();
-//
-//        User userEntity = this.userRepository.findByEmail(user.getUsername());
-//
-//        return userEntity.isAdmin() || userEntity.isAuthor(answer);
-//    }
+    private boolean isUserAuthorOrAdmin(Answer answer) {
+        UserDetails user = (UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+
+        User userEntity = this.userRepository.findByEmail(user.getUsername());
+
+        return userEntity.isAdmin() || userEntity.isAuthor(answer);
+    }
 
 }

@@ -113,6 +113,13 @@ public class User {
     }
 
     @Transient
+    public boolean isAdmin(){
+        return this.getRoles()
+                .stream()
+                .anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+    }
+
+    @Transient
     public boolean isAuthor(Question question) {
         return Objects.equals(this.getId(),
         question.getAuthor().getId());
