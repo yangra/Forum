@@ -4,6 +4,7 @@ package javazoo.forum.entity;
 import javax.persistence.*;
 import java.lang.invoke.SerializedLambda;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -111,5 +112,15 @@ public class User {
         this.answers = answers;
     }
 
+    @Transient
+    public boolean isAuthor(Question question) {
+        return Objects.equals(this.getId(),
+        question.getAuthor().getId());
+    }
 
+    @Transient
+    public boolean isAuthor(Answer answer) {
+        return Objects.equals(this.getId(),
+        answer.getAuthor().getId());
+    }
 }
