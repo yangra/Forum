@@ -11,6 +11,7 @@
                 </button>
             </div>
             <div class="navbar-collapse collapse">
+
                 <ul class="navbar-left">
                     <li sec:authorize="isAuthenticated()">
                         <a th:href="@{/question/create}" class="btn btn-warning btn-md"
@@ -19,6 +20,7 @@
                         </a>
                     </li>
                 </ul>
+
                 <ul class="nav navbar-nav navbar-right">
 
                     <li sec:authorize="isAuthenticated()">
