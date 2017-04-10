@@ -1,5 +1,7 @@
 package javazoo.forum.Controller.admin;
 
+import javazoo.forum.entity.Answer;
+import javazoo.forum.entity.Question;
 import org.springframework.util.StringUtils;
 import javazoo.forum.bindingModel.UserBindingModel;
 import javazoo.forum.entity.Role;
@@ -94,8 +96,45 @@ public class AdminUserController {
 //            roles.add(this.roleRepository.findOne(roleId));
 //        }
 
+        user.setRoles(roles);
+
         this.userRepository.saveAndFlush(user);
 
         return "redirect:/admin/users/";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Integer id, Model model) {
+        if (!this.userRepository.exists(id)){
+            return "redirect:/admin/users/";
+        }
+
+        User user = this.userRepository.findOne(id);
+
+        model.addAttribute("users", user);
+        model.addAttribute("view", "admin/user/delete");
+
+        return "base-layout";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteProcess(@PathVariable Integer id) {
+        if (!this.userRepository.exists(id)) {
+            return "redirect:/admin/users/";
+        }
+
+        User user = this.userRepository.findOne(id);
+
+//        for (Answer answer : user.getAnswers()) {
+//            this.questionRepository.delete(answer);
+//        }
+
+        for (Question question : user.getQuestions()) {
+            this.questionRepository.delete(question);
+        }
+
+        this.userRepository.delete(user);
+
+        return  "redirect:/admin/users/";
     }
 }
