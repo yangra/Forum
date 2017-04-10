@@ -1,5 +1,7 @@
 package javazoo.forum.Controller.admin;
 
+import org.springframework.util.StringUtils;
+import javazoo.forum.bindingModel.UserBindingModel;
 import javazoo.forum.entity.Role;
 import javazoo.forum.entity.User;
 import javazoo.forum.repository.AnswersRepository;
@@ -7,13 +9,17 @@ import javazoo.forum.repository.QuestionRepository;
 import javazoo.forum.repository.RoleRepository;
 import javazoo.forum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Ivan Kirov on 08/04/17.
@@ -59,5 +65,37 @@ public class AdminUserController {
         model.addAttribute("view", "admin/user/edit");
 
         return "base-layout";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editProcess(@PathVariable Integer id, UserBindingModel userBindingModel) {
+        if (!this.userRepository.exists(id)) {
+            return "redirect:/admin/users/";
+        }
+
+        User user = this.userRepository.findOne(id);
+
+        if (!StringUtils.isEmpty(userBindingModel.getPassword())
+                && !StringUtils.isEmpty(userBindingModel.getConfirmPassword())) {
+
+            if (userBindingModel.getPassword().equals((userBindingModel.getConfirmPassword()))) {
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+                user.setPassword(bCryptPasswordEncoder.encode(userBindingModel.getPassword()));
+            }
+        }
+
+        user.setFullName(userBindingModel.getFullName());
+        user.setEmail(userBindingModel.getEmail());
+
+        Set<Role> roles = new HashSet<>();
+
+//        for (Integer roleId : userBindingModel.getRoles()) {
+//            roles.add(this.roleRepository.findOne(roleId));
+//        }
+
+        this.userRepository.saveAndFlush(user);
+
+        return "redirect:/admin/users/";
     }
 }
