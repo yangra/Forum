@@ -80,7 +80,6 @@ public class QuestionController {
 
         List<Answer> answers = this.answersRepository.findByQuestion(question);
 
-
         model.addAttribute("question", question);
         model.addAttribute("view", "question/details");
         model.addAttribute("answers", answers);

@@ -1,5 +1,6 @@
 package javazoo.forum.Controller.admin;
 
+import javazoo.forum.entity.Role;
 import javazoo.forum.entity.User;
 import javazoo.forum.repository.AnswersRepository;
 import javazoo.forum.repository.QuestionRepository;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -39,6 +41,22 @@ public class AdminUserController {
 
         model.addAttribute("users", users);
         model.addAttribute("view", "admin/user/list");
+
+        return "base-layout";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable Integer id, Model model) {
+        if (!this.userRepository.exists(id)){
+            return "redirect:/admin/users/";
+        }
+
+        User user = this.userRepository.findOne(id);
+        List<Role> roles = this.roleRepository.findAll();
+
+        model.addAttribute("users", user);
+        model.addAttribute("roles", roles);
+        model.addAttribute("view", "admin/user/edit");
 
         return "base-layout";
     }

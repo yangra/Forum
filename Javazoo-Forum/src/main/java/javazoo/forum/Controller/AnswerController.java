@@ -90,7 +90,6 @@ public class AnswerController {
 
         answer.setContent(answerBindingModel.getContent());
 
-
         this.answersRepository.saveAndFlush(answer);
 
         return "redirect:/question/{qId}";
