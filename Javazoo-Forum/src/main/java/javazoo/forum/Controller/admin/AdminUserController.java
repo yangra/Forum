@@ -63,7 +63,7 @@ public class AdminUserController {
         User user = this.userRepository.findOne(id);
         List<Role> roles = this.roleRepository.findAll();
 
-        model.addAttribute("users", user);
+        model.addAttribute("user", user);
         model.addAttribute("roles", roles);
         model.addAttribute("view", "admin/user/edit");
 
@@ -112,7 +112,7 @@ public class AdminUserController {
 
         User user = this.userRepository.findOne(id);
 
-        model.addAttribute("users", user);
+        model.addAttribute("user", user);
         model.addAttribute("view", "admin/user/delete");
 
         return "base-layout";
