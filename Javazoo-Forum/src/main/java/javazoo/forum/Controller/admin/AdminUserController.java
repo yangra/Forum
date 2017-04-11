@@ -1,6 +1,5 @@
-package javazoo.forum.Controller.admin;
+package javazoo.forum.controller.admin;
 
-import javazoo.forum.entity.Answer;
 import javazoo.forum.entity.Question;
 import org.springframework.util.StringUtils;
 import javazoo.forum.bindingModel.UserBindingModel;

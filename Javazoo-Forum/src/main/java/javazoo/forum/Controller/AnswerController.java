@@ -1,5 +1,6 @@
 package javazoo.forum.controller;
 
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.NestedParticle;
 import javazoo.forum.bindingModel.AnswerBindingModel;
 import javazoo.forum.entity.Answer;
 import javazoo.forum.entity.Question;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.transaction.Transactional;
+
 @Controller
+@Transactional
 public class AnswerController {
 
     @Autowired
@@ -93,6 +97,20 @@ public class AnswerController {
         this.answersRepository.saveAndFlush(answer);
 
         return "redirect:/question/{qId}";
+    }
+
+    @PostMapping("question/{qId}/answer/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(Model model, @PathVariable Integer qId){
+        if (!this.answersRepository.exists(qId)){
+            return "redirect:/";
+        }
+        Answer answer = this.answersRepository.findOne(qId);
+
+        model.addAttribute("answer",answer );
+        model.addAttribute("view", "answer/delete");
+
+        return  "base-layout";
     }
 
     private boolean isUserAuthorOrAdmin(Answer answer) {

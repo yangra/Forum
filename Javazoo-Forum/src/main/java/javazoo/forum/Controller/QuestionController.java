@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Controller
+@Transactional
 public class QuestionController {
 
     @Autowired
@@ -126,6 +128,35 @@ public class QuestionController {
 
         return "redirect:/question/" + question.getId();
     }
+
+    @GetMapping("/question/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(Model model, @PathVariable Integer id){
+        if(!this.questionRepository.exists(id)){
+            return "redirect:/";
+        }
+
+        Question question = this.questionRepository.findOne(id);
+
+        model.addAttribute("question", question);
+        model.addAttribute("view", "question/delete");
+
+        return "base-layout";
+    }
+
+    @PostMapping("/question/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String deleteProcess(@PathVariable Integer id){
+        if(!this.questionRepository.exists(id)){
+            return "redirect:/";
+        }
+        Question question = this.questionRepository.findOne(id);
+
+        this.questionRepository.delete(question);
+
+        return "redirect:/";
+    }
+
 
     private boolean isUserAuthorOrAdmin(Question question) {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()

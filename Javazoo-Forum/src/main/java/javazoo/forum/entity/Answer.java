@@ -49,7 +49,7 @@ public class Answer {
     public void setContent(String content) {
         this.content = content;
     }
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(nullable = false, name = "authorId")
     public User getAuthor() {
         return author;
@@ -69,7 +69,7 @@ public class Answer {
         this.creationDate = creationDate;
     }
 
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(nullable = false, name = "questionId")
     public Question getQuestion() {
         return question;

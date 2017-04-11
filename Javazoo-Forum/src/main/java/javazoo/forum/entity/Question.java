@@ -22,13 +22,14 @@ public class Question {
         this.title = title;
         this.content = content;
         this.author = author;
-
         this.creationDate = new Date();
         this.answers = new HashSet<>();
 
     }
 
-    public Question(){    }
+    public Question(){
+        this.answers = new HashSet<>();
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,7 +79,7 @@ public class Question {
         this.creationDate = creationDate;
     }
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question",cascade = CascadeType.REMOVE)
     public Set<Answer> getAnswers() {
         return answers;
     }
