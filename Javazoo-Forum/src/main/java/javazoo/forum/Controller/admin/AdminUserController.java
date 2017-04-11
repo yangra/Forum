@@ -1,5 +1,10 @@
 package javazoo.forum.controller.admin;
 
+<<<<<<< HEAD
+=======
+import javazoo.forum.bindingModel.UserEditBindingModel;
+import javazoo.forum.entity.Answer;
+>>>>>>> ee9f079cfb48cc2ad5da37b10fb7897f50834bcb
 import javazoo.forum.entity.Question;
 import org.springframework.util.StringUtils;
 import javazoo.forum.bindingModel.UserBindingModel;
@@ -61,7 +66,7 @@ public class AdminUserController {
         User user = this.userRepository.findOne(id);
         List<Role> roles = this.roleRepository.findAll();
 
-        model.addAttribute("users", user);
+        model.addAttribute("user", user);
         model.addAttribute("roles", roles);
         model.addAttribute("view", "admin/user/edit");
 
@@ -69,7 +74,7 @@ public class AdminUserController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editProcess(@PathVariable Integer id, UserBindingModel userBindingModel) {
+    public String editProcess(@PathVariable Integer id, UserEditBindingModel userBindingModel) {
         if (!this.userRepository.exists(id)) {
             return "redirect:/admin/users/";
         }
@@ -91,9 +96,9 @@ public class AdminUserController {
 
         Set<Role> roles = new HashSet<>();
 
-//        for (Integer roleId : userBindingModel.getRoles()) {
-//            roles.add(this.roleRepository.findOne(roleId));
-//        }
+        for (Integer roleId : userBindingModel.getRoles()) {
+            roles.add(this.roleRepository.findOne(roleId));
+        }
 
         user.setRoles(roles);
 
@@ -110,7 +115,7 @@ public class AdminUserController {
 
         User user = this.userRepository.findOne(id);
 
-        model.addAttribute("users", user);
+        model.addAttribute("user", user);
         model.addAttribute("view", "admin/user/delete");
 
         return "base-layout";
@@ -124,9 +129,9 @@ public class AdminUserController {
 
         User user = this.userRepository.findOne(id);
 
-//        for (Answer answer : user.getAnswers()) {
-//            this.questionRepository.delete(answer);
-//        }
+        for (Answer answer : user.getAnswers()) {
+            this.answersRepository.delete(answer);
+        }
 
         for (Question question : user.getQuestions()) {
             this.questionRepository.delete(question);
