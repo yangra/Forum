@@ -1,5 +1,6 @@
 package javazoo.forum.Controller.admin;
 
+import javazoo.forum.bindingModel.UserEditBindingModel;
 import javazoo.forum.entity.Answer;
 import javazoo.forum.entity.Question;
 import org.springframework.util.StringUtils;
@@ -70,7 +71,7 @@ public class AdminUserController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editProcess(@PathVariable Integer id, UserBindingModel userBindingModel) {
+    public String editProcess(@PathVariable Integer id, UserEditBindingModel userBindingModel) {
         if (!this.userRepository.exists(id)) {
             return "redirect:/admin/users/";
         }
@@ -92,9 +93,9 @@ public class AdminUserController {
 
         Set<Role> roles = new HashSet<>();
 
-//        for (Integer roleId : userBindingModel.getRoles()) {
-//            roles.add(this.roleRepository.findOne(roleId));
-//        }
+        for (Integer roleId : userBindingModel.getRoles()) {
+            roles.add(this.roleRepository.findOne(roleId));
+        }
 
         user.setRoles(roles);
 
@@ -125,9 +126,9 @@ public class AdminUserController {
 
         User user = this.userRepository.findOne(id);
 
-//        for (Answer answer : user.getAnswers()) {
-//            this.questionRepository.delete(answer);
-//        }
+        for (Answer answer : user.getAnswers()) {
+            this.answersRepository.delete(answer);
+        }
 
         for (Question question : user.getQuestions()) {
             this.questionRepository.delete(question);
