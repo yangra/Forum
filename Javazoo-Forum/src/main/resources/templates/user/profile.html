@@ -1,14 +1,17 @@
 <main>
     <div class="container body-content span=8 offset=2">
         <div class="well">
-            <form class="form-horizontal" th:action="@{/admin/users/edit/{id}(id=${user.id})}" method="post">
+            <form class="form-horizontal" method="post">
                 <fieldset>
                     <legend>Edit Profile</legend>
 
                     <div class="form-group">
                         <label class="col-sm-4 control-label">Username</label>
                         <div class="col-sm-4 ">
-                            <span th:text="${user.username}"></span>
+                            <h4>
+                                <span th:text="${user.username}"></span>
+                            </h4>
+
                         </div>
                     </div>
 
