@@ -29,8 +29,8 @@ public class CategoryController {
 
     @GetMapping("categories/{id}")
     public String openCategory(@PathVariable Integer id, Model model){
-        List<Category> categories = this.categoryRepository.findAll();
-        List<Subcategory> subcategories = this.subcategoryRepository.findAll();
+        List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
+        List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
 
         Category category = this.categoryRepository.findOne(id);
         List<Question> questions = this.questionRepository.findByCategoryOrderByCreationDateDesc(category);
@@ -44,8 +44,8 @@ public class CategoryController {
 
     @GetMapping("categories/{catId}/{subId}")
     public String openSubCategory(@PathVariable Integer catId, @PathVariable Integer subId, Model model){
-        List<Category> categories = this.categoryRepository.findAll();
-        List<Subcategory> subcategories = this.subcategoryRepository.findAll();
+        List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
+        List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
         Subcategory subcategory = this.subcategoryRepository.findOne(subId);
         List<Question> questions = this.questionRepository.findBySubcategoryOrderByCreationDateDesc(subcategory);
         model.addAttribute("categories", categories);

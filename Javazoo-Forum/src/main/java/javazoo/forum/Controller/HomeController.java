@@ -26,7 +26,7 @@ public class HomeController {
     @GetMapping("/")
     public String index(Model model){
 
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = categoryRepository.findAllByOrderByOrderNoAsc();
         List<Question> questions = this.questionRepository.findAll();
 
         model.addAttribute("view", "home/index");

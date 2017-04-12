@@ -40,8 +40,8 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     public String create(Model model){
 
-        List<Category> categories = this.categoryRepository.findAll();
-        List<Subcategory> subcategories = this.subcategoryRepository.findAll();
+        List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
+        List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
 
         model.addAttribute("view", "question/create");
         model.addAttribute("categories", categories);
@@ -93,8 +93,8 @@ public class QuestionController {
         Question question = this.questionRepository.findOne(id);
 
         List<Answer> answers = this.answersRepository.findByQuestion(question);
-        List<Category> categories = this.categoryRepository.findAll();
-        List<Subcategory> subcategories = this.subcategoryRepository.findAll();
+        List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
+        List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
 
         Subcategory subcategory = question.getSubcategory();
         Category category = subcategory.getCategory();
