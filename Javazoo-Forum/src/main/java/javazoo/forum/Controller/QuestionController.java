@@ -138,6 +138,10 @@ public class QuestionController {
 
         Question question = this.questionRepository.findOne(id);
 
+        if (!isUserAuthorOrAdmin(question)){
+            return "redirect:/question/" + id;
+        }
+
         model.addAttribute("question", question);
         model.addAttribute("view", "question/delete");
 
@@ -151,6 +155,10 @@ public class QuestionController {
             return "redirect:/";
         }
         Question question = this.questionRepository.findOne(id);
+
+        if (!isUserAuthorOrAdmin(question)){
+            return "redirect:/question/" + id;
+        }
 
         this.questionRepository.delete(question);
 

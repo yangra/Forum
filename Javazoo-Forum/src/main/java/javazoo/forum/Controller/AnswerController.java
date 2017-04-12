@@ -109,6 +109,10 @@ public class AnswerController {
         }
         Answer answer = this.answersRepository.findOne(id);
 
+        if(!isUserAuthorOrAdmin(answer)){
+            return "redirect:/question/"+qId;
+        }
+
         model.addAttribute("answer",answer );
         model.addAttribute("qId", qId);
         model.addAttribute("view", "answer/delete");
@@ -124,6 +128,11 @@ public class AnswerController {
             return "redirect:/";
         }
         Answer answer = this.answersRepository.findOne(id);
+
+
+        if(!isUserAuthorOrAdmin(answer)){
+            return "redirect:/question/"+qId;
+        }
 
         this.answersRepository.delete(answer);
 
