@@ -1,12 +1,8 @@
 package javazoo.forum.controller;
 
 import javazoo.forum.bindingModel.QuestionBindingModel;
-import javazoo.forum.entity.Answer;
-import javazoo.forum.entity.Question;
-import javazoo.forum.entity.User;
-import javazoo.forum.repository.AnswersRepository;
-import javazoo.forum.repository.QuestionRepository;
-import javazoo.forum.repository.UserRepository;
+import javazoo.forum.entity.*;
+import javazoo.forum.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -34,10 +30,22 @@ public class QuestionController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private SubcategoryRepository subcategoryRepository;
+
     @GetMapping("/question/create")
     @PreAuthorize("isAuthenticated()")
     public String create(Model model){
+
+        List<Category> categories = this.categoryRepository.findAll();
+        List<Subcategory> subcategories = this.subcategoryRepository.findAll();
+
         model.addAttribute("view", "question/create");
+        model.addAttribute("categories", categories);
+        model.addAttribute("subcategories", subcategories);
 
         return "base-layout";
     }
@@ -49,11 +57,15 @@ public class QuestionController {
                 .getAuthentication().getPrincipal();
 
         User userEntity = this.userRepository.findByUsername(user.getUsername());
+        Category category = this.categoryRepository.findOne(questionBindingModel.getCategoryId());
+        Subcategory subcategory = this.subcategoryRepository.findOne(questionBindingModel.getSubcategoryId());
 
         Question questionEntity = new Question(
                         questionBindingModel.getTitle(),
                         questionBindingModel.getContent(),
-                        userEntity
+                        userEntity,
+                        category,
+                        subcategory
         );
 
         this.questionRepository.saveAndFlush(questionEntity);
@@ -81,10 +93,20 @@ public class QuestionController {
         Question question = this.questionRepository.findOne(id);
 
         List<Answer> answers = this.answersRepository.findByQuestion(question);
+        List<Category> categories = this.categoryRepository.findAll();
+        List<Subcategory> subcategories = this.subcategoryRepository.findAll();
+
+        Subcategory subcategory = question.getSubcategory();
+        Category category = subcategory.getCategory();
 
         model.addAttribute("question", question);
-        model.addAttribute("view", "question/details");
         model.addAttribute("answers", answers);
+        model.addAttribute("subcategoryId", subcategory.getId());
+        model.addAttribute("subcategories", subcategories);
+        model.addAttribute("categories", categories);
+        model.addAttribute("categoryId", category.getId());
+        model.addAttribute("view", "question/details");
+
 
         return "base-layout";
     }

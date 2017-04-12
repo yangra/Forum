@@ -1,6 +1,6 @@
 <main>
     <div class="container">
-        <aside class="col-sm-3">
+        <aside class="col-md-3">
             <div id="MainMenu">
                 <h2>Categories</h2>
                 <div class="list-group panel">
@@ -9,16 +9,16 @@
                            class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="MainMenu">
                             <span th:text="${category.name}"></span>
                         </a>
-                        <!--<div class="collapse" th:id="${category.id}"
+                        <div class="collapse" th:id="${category.id}"
                              th:classappend="(${category.id.equals(catId)})?in:out">
-                            <th:block th:each="sub:${subs}" th:if="${sub.category.equals(category)}">
-                                <a th:href="'/categories/' + ${category.id} + '/' + ${sub.id}" class="list-group-item"
-                                   th:classappend="(${sub.id.equals(subId)})?active:out">
-                                    <span th:text="${sub.name}"></span>
-                                    <span th:text="${sub.questions.size()}" class="badge"></span>
+                            <th:block th:each="subcategory:${subcategories}" th:if="${subcategory.category.equals(category)}">
+                                <a th:href="'/categories/' + ${category.id} + '/' + ${subcategory.id}" class="list-group-item"
+                                   th:classappend="(${subcategory.id.equals(subId)})?active:out">
+                                    <span th:text="${subcategory.name}"></span>
+                                    <span th:text="${subcategory.questions.size()}"  class="badge"></span>
                                 </a>
                             </th:block>
-                        </div>-->
+                        </div>
                     </th:block>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                                     </div>
                                     <div class="col-md-4 ">
                                         Created by:<br/>
-                                        <span th:text="${question.author.username}"></span><br/>
+                                        <span >AUTHOR</span><br/>
                                         <span th:text="${question.creationDate}"></span>
                                     </div>
                                     <div class="col-md-4 ">

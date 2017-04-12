@@ -16,15 +16,17 @@ public class Question {
     private User author;
     private Date creationDate;
     private Set<Answer> answers;
+    private Category category;
+    private Subcategory subcategory;
 
-
-    public Question(String title, String content, User author){
+    public Question(String title, String content, User author, Category category, Subcategory subcategory){
         this.title = title;
         this.content = content;
         this.author = author;
         this.creationDate = new Date();
         this.answers = new HashSet<>();
-
+        this.category = category;
+        this.subcategory = subcategory;
     }
 
     public Question(){
@@ -86,5 +88,25 @@ public class Question {
 
     public void setAnswers(Set<Answer> answers) {
         this.answers = answers;
+    }
+
+    @ManyToOne()
+    @JoinColumn(nullable = false, name="categoryId")
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    @ManyToOne()
+    @JoinColumn(nullable = false, name="subcategoryId" )
+    public Subcategory getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(Subcategory subcategory) {
+        this.subcategory = subcategory;
     }
 }

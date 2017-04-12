@@ -1,88 +1,112 @@
 <main>
-    <div class="col-md-9 col-md-offset-2">
-        <article>
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title" th:text="${question.title}"></h3>
-                </div>
-                <div class="panel-body">
-                    <div class="col-md-2" style="border-right: 1px solid lightgray">
-                        <span th:text="${question.author.username}"></span>
-                        <span th:text="${question.creationDate}"></span>
-                    </div>
-                    <div class="col-md-10">
-                        <p th:text="${question.content}"></p>
-                    </div>
-
-                </div>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <th:block sec:authorize="isAuthenticated()">
-                                <a class="btn btn-warning btn-sm"
-                                   th:href="@{/question/{qId}/answer/create(qId=${question.id})}">Answer &raquo;</a>
+    <div class="container">
+        <aside class="col-sm-3">
+            <div id="MainMenu">
+                <h2>Categories</h2>
+                <div class="list-group panel">
+                    <th:block th:each="category:${categories}">
+                        <a th:href="'/categories/'+${category.id}" th:attr="data-target='#' + ${category.id}"
+                           class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="MainMenu">
+                            <span th:text="${category.name}"></span>
+                        </a>
+                        <div class="collapse" th:id="${category.id}"
+                             th:classappend="(${category.id.equals(catId)})?in:out">
+                            <th:block th:each="sub:${subs}" th:if="${sub.category.equals(category)}">
+                                <a th:href="'/categories/' + ${category.id} + '/' + ${sub.id}" class="list-group-item"
+                                   th:classappend="(${sub.id.equals(subId)})?active:out">
+                                    <span th:text="${sub.name}"></span>
+                                    <span th:text="${sub.questions.size()}" class="badge"></span>
+                                </a>
                             </th:block>
                         </div>
-                        <div class="col-md-5">
-                            Tags:
-                            <a href="#" class="label label-default"> Programming</a>
-                            <a href="#" class="label label-default"> Infrastructure</a>
-                        </div>
-                        <div class="col-md-5">
-                            <a href="#">
-                                Category of the post
-                            </a>
-                        </div>
-                    </div>
+                    </th:block>
                 </div>
             </div>
-        </article>
-
-
-        <div class="pull-right">
-            <th:block sec:authorize="isAuthenticated()" th:if="${user.isAdmin() OR user.isAuthor(question)}">
-                <a class="btn btn-success btn-xs" th:href="@{/question/edit/{id}(id = ${question.id})}">Edit</a>
-                <a class="btn btn-danger btn-xs" th:href="@{/question/delete/{id}(id = ${question.id})}">Delete</a>
-            </th:block>
-        </div>
-
-        <br/>
-        <br/>
-
-        <div class="col-md-9 col-md-offset-2">
-            <th:block th:each="answer:${answers}">
+        </aside>
+        <div class="col-sm-8 col-md-offset-1">
+            <article>
                 <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" th:text="${question.title}"></h3>
+                    </div>
                     <div class="panel-body">
                         <div class="col-md-2" style="border-right: 1px solid lightgray">
-                            <span th:text="${answer.author.username}"></span><br/>
-
+                            <span th:text="${question.author.username}"></span>
+                            <span th:text="${question.creationDate}"></span>
                         </div>
-                        <article class="col-md-10">
-                            <span th:text="${answer.content}"></span><br/>
-
-                        </article>
-                        <div class="col-md-2" style="border-right: 1px solid lightgray">
-                            <span th:text="${answer.creationDate}"></span>
-
-                        </div>
-
-
-                        <div class="pull-right">
-                            <th:block sec:authorize="isAuthenticated()"
-                                      th:if="${user.isAdmin() OR user.isAuthor(answer)}">
-                                <a class="btn btn-success btn-xs"
-                                   th:href="@{/question/{qId}/answer/edit/{id}(id = ${answer.id}, qId = ${question.id})}">Edit</a>
-                                <a class="btn btn-danger btn-xs"
-                                   th:href="@{/question/{qId}/answer/delete/{id}(id = ${answer.id}, qId = ${question.id})}">Delete</a>
-
-                            </th:block>
+                        <div class="col-md-10">
+                            <p th:text="${question.content}"></p>
                         </div>
 
                     </div>
+                    <div class="panel-footer">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <th:block sec:authorize="isAuthenticated()">
+                                    <a class="btn btn-warning btn-sm"
+                                       th:href="@{/question/{qId}/answer/create(qId=${question.id})}">Answer &raquo;</a>
+                                </th:block>
+                            </div>
+                            <div class="col-md-5">
+                                Tags:
+                                <a href="#" class="label label-default"> Programming</a>
+                                <a href="#" class="label label-default"> Infrastructure</a>
+                            </div>
+                            <div class="col-md-5">
+                                <a href="#">
+                                    Category of the post
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </th:block>
+            </article>
+
+
+            <div class="pull-right">
+                <th:block sec:authorize="isAuthenticated()" th:if="${user.isAdmin() OR user.isAuthor(question)}">
+                    <a class="btn btn-success btn-xs" th:href="@{/question/edit/{id}(id = ${question.id})}">Edit</a>
+                    <a class="btn btn-danger btn-xs" th:href="@{/question/delete/{id}(id = ${question.id})}">Delete</a>
+                </th:block>
+            </div>
+
+            <br/>
+            <br/>
+
+            <div class="col-md-9 col-md-offset-2">
+                <th:block th:each="answer:${answers}">
+                    <div class="panel panel-primary">
+                        <div class="panel-body">
+                            <div class="col-md-2" style="border-right: 1px solid lightgray">
+                                <span th:text="${answer.author.username}"></span><br/>
+
+                            </div>
+                            <article class="col-md-10">
+                                <span th:text="${answer.content}"></span><br/>
+
+                            </article>
+                            <div class="col-md-2" style="border-right: 1px solid lightgray">
+                                <span th:text="${answer.creationDate}"></span>
+
+                            </div>
+
+
+                            <div class="pull-right">
+                                <th:block sec:authorize="isAuthenticated()"
+                                          th:if="${user.isAdmin() OR user.isAuthor(answer)}">
+                                    <a class="btn btn-success btn-xs"
+                                       th:href="@{/question/{qId}/answer/edit/{id}(id = ${answer.id}, qId = ${question.id})}">Edit</a>
+                                    <a class="btn btn-danger btn-xs"
+                                       th:href="@{/question/{qId}/answer/delete/{id}(id = ${answer.id}, qId = ${question.id})}">Delete</a>
+
+                                </th:block>
+                            </div>
+
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+
         </div>
-
-
     </div>
 </main>

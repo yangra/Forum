@@ -1,2 +1,16 @@
 <script th:src="@{/scripts/jquery-1.10.2.js}"></script>
 <script th:src="@{/scripts/bootstrap.js}"></script>
+<script type="text/javascript">
+    function sendAjaxRequest(){
+        var catId = $("#category_select").val();
+
+        $.get( "/subcategories?catId=" + catId, function( data ) {
+            $("#subcategory_select").empty();
+
+            $.each(data, function(index, sub) {
+                var option = "<option value = " + sub.id + ">" + sub.name +  "</option>";
+                $("#subcategory_select").append(option);
+            });
+        });
+    };
+</script>
