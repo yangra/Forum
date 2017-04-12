@@ -10,12 +10,14 @@
                             <span th:text="${category.name}"></span>
                         </a>
                         <div class="collapse" th:id="${category.id}"
-                             th:classappend="(${category.id.equals(catId)})?in:out">
-                            <th:block th:each="sub:${subs}" th:if="${sub.category.equals(category)}">
-                                <a th:href="'/categories/' + ${category.id} + '/' + ${sub.id}" class="list-group-item"
-                                   th:classappend="(${sub.id.equals(subId)})?active:out">
-                                    <span th:text="${sub.name}"></span>
-                                    <span th:text="${sub.questions.size()}" class="badge"></span>
+                             th:classappend="(${category.id.equals(categoryId)})?in:out">
+                            <th:block th:each="subcategory:${subcategories}"
+                                      th:if="${subcategory.category.equals(category)}">
+                                <a th:href="'/categories/' + ${category.id} + '/' + ${subcategory.id}"
+                                   class="list-group-item"
+                                   th:classappend="(${subcategory.id.equals(subcategoryId)})?active:out">
+                                    <span th:text="${subcategory.name}"></span>
+                                    <span th:text="${subcategory.questions.size()}" class="badge"></span>
                                 </a>
                             </th:block>
                         </div>
@@ -23,7 +25,7 @@
                 </div>
             </div>
         </aside>
-        <div class="col-sm-8 col-md-offset-1">
+        <section class="col-sm-8 col-md-offset-1">
             <article>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -79,18 +81,13 @@
                         <div class="panel-body">
                             <div class="col-md-2" style="border-right: 1px solid lightgray">
                                 <span th:text="${answer.author.username}"></span><br/>
-
                             </div>
                             <article class="col-md-10">
                                 <span th:text="${answer.content}"></span><br/>
-
                             </article>
                             <div class="col-md-2" style="border-right: 1px solid lightgray">
                                 <span th:text="${answer.creationDate}"></span>
-
                             </div>
-
-
                             <div class="pull-right">
                                 <th:block sec:authorize="isAuthenticated()"
                                           th:if="${user.isAdmin() OR user.isAuthor(answer)}">
@@ -98,15 +95,12 @@
                                        th:href="@{/question/{qId}/answer/edit/{id}(id = ${answer.id}, qId = ${question.id})}">Edit</a>
                                     <a class="btn btn-danger btn-xs"
                                        th:href="@{/question/{qId}/answer/delete/{id}(id = ${answer.id}, qId = ${question.id})}">Delete</a>
-
                                 </th:block>
                             </div>
-
                         </div>
                     </div>
                 </th:block>
             </div>
-
-        </div>
+        </section>
     </div>
 </main>

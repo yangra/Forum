@@ -1,6 +1,11 @@
-
+ul.navbar-left{
+    list-style-type: none;
+}
+ul.navbar-left>li>a.btn{
+    margin-top: 8px;
+}
 h2 {
-    margin-top: 0px
+    margin-top: 0;
 }
 
 section {
