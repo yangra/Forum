@@ -1,6 +1,5 @@
 package javazoo.forum.entity;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -18,7 +17,6 @@ public class Answer {
     private User author;
     private Date creationDate;
     private Question question;
-
 
 
     public Answer(String content, User author, Question question){
@@ -49,6 +47,7 @@ public class Answer {
     public void setContent(String content) {
         this.content = content;
     }
+
     @ManyToOne
     @JoinColumn(nullable = false, name = "authorId")
     public User getAuthor() {
