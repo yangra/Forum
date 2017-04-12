@@ -1,4 +1,4 @@
-package javazoo.forum.controller.admin;
+package javazoo.forum.Controller.admin;
 
 import javazoo.forum.bindingModel.UserEditBindingModel;
 import javazoo.forum.entity.Answer;
