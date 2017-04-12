@@ -79,6 +79,7 @@ public class AnswerController {
         model.addAttribute("qId", qId);
         return "base-layout";
     }
+
     @PostMapping("question/{qId}/answer/edit/{id}")
     @PreAuthorize("isAuthenticated()")
     public String editProcess(@PathVariable Integer id, @PathVariable Integer qId, AnswerBindingModel answerBindingModel){
@@ -99,19 +100,39 @@ public class AnswerController {
         return "redirect:/question/{qId}";
     }
 
-    @PostMapping("question/{qId}/answer/delete/{id}")
+    @GetMapping("question/{qId}/answer/delete/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String delete(Model model, @PathVariable Integer qId){
-        if (!this.answersRepository.exists(qId)){
+    public String delete(Model model, @PathVariable Integer id, @PathVariable Integer qId ){
+
+        if (!this.answersRepository.exists(id)){
             return "redirect:/";
         }
-        Answer answer = this.answersRepository.findOne(qId);
+        Answer answer = this.answersRepository.findOne(id);
 
         model.addAttribute("answer",answer );
+        model.addAttribute("qId", qId);
         model.addAttribute("view", "answer/delete");
 
         return  "base-layout";
     }
+
+    @PostMapping("question/{qId}/answer/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String deleteProcess(@PathVariable Integer id, @PathVariable Integer qId){
+
+        if(!this.answersRepository.exists(id)){
+            return "redirect:/";
+        }
+        Answer answer = this.answersRepository.findOne(id);
+
+        this.answersRepository.delete(answer);
+
+        return "redirect:/question/{qId}";
+
+    }
+
+
+
 
     private boolean isUserAuthorOrAdmin(Answer answer) {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()

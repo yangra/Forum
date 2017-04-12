@@ -69,7 +69,7 @@ public class Answer {
         this.creationDate = creationDate;
     }
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(nullable = false, name = "questionId")
     public Question getQuestion() {
         return question;
