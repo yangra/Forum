@@ -15,7 +15,7 @@
 
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-4">
-                            <a class="btn btn-default" th:href="@{/question/{qId}/answer/{id}(id = ${answer.id}, qId=${qId})}">Cancel</a>
+                            <a class="btn btn-default" th:href="@{/question/{qId}(qId=${qId})}">Cancel</a>
                             <input type="submit" class="btn btn-danger" value="Delete"/>
                         </div>
                     </div>
