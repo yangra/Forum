@@ -12,7 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class CategoryController {
@@ -33,7 +36,21 @@ public class CategoryController {
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
         List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
         Category category = this.categoryRepository.findOne(id);
-        List<Question> questions = this.questionRepository.findByCategoryOrderByCreationDateDesc(category);
+        List<Question> questions = new ArrayList<>();
+        for(Subcategory subcategory:category.getSubcategories()) {
+            List<Question> subQuestions = this.questionRepository.findAllBySubcategory(subcategory);
+            for(int i=0;i<subQuestions.size();i++){
+                questions.add(subQuestions.get(i));
+            }
+        }
+//        Collections.sort(questions, (Question q1, Question q2) -> q2.getCreationDate().compareTo(q1.getCreationDate()));
+//        Collections.sort(questions, new Comparator<Question>() {
+//            public int compare(Question o1, Question o2) {
+//                return o2.getCreationDate().compareTo(o1.getCreationDate());
+//            }
+//        });
+
+        questions = questions.stream().sorted(Comparator.comparing(Question::getCreationDate).reversed()).collect(Collectors.toList());
 
         model.addAttribute("categories", categories);
         model.addAttribute("questions", questions);
@@ -64,7 +81,7 @@ public class CategoryController {
     @ResponseBody
     public List getSubcategories(@RequestParam Integer catId) {
         List<Sub> subcats = new ArrayList<>();
-        Category category= this.categoryRepository.findOne(catId);
+        Category category = this.categoryRepository.findOne(catId);
         List<Subcategory> subs = this.subcategoryRepository.findByCategory(category);
         for(int i = 0; i<subs.size();i++){
             Sub sub = new Sub();
@@ -96,4 +113,6 @@ public class CategoryController {
             this.id = id;
         }
     }
+
+
 }
