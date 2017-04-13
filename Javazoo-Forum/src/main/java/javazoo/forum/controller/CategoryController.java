@@ -6,6 +6,7 @@ import javazoo.forum.entity.Subcategory;
 import javazoo.forum.repository.CategoryRepository;
 import javazoo.forum.repository.QuestionRepository;
 import javazoo.forum.repository.SubcategoryRepository;
+import javazoo.forum.viewModel.SubcategoryViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -80,39 +81,17 @@ public class CategoryController {
     @RequestMapping(value = "/subcategories" )
     @ResponseBody
     public List getSubcategories(@RequestParam Integer catId) {
-        List<Sub> subcats = new ArrayList<>();
+        List<SubcategoryViewModel> subcategories = new ArrayList<>();
         Category category = this.categoryRepository.findOne(catId);
         List<Subcategory> subs = this.subcategoryRepository.findByCategory(category);
         for(int i = 0; i<subs.size();i++){
-            Sub sub = new Sub();
+            SubcategoryViewModel sub = new SubcategoryViewModel();
             sub.setId(subs.get(i).getId());
             sub.setName(subs.get(i).getName());
-            subcats.add(sub);
+            subcategories.add(sub);
         }
-        return subcats;
+        return subcategories;
 
     }
-
-    private class Sub{
-        private String name;
-        private Integer id;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-    }
-
 
 }

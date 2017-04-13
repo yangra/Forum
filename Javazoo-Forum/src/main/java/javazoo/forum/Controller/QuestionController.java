@@ -57,13 +57,14 @@ public class QuestionController {
                 .getAuthentication().getPrincipal();
 
         User userEntity = this.userRepository.findByUsername(user.getUsername());
-        //Category category = this.categoryRepository.findOne(questionBindingModel.getCategoryId());
+        Category category = this.categoryRepository.findOne(questionBindingModel.getCategoryId());
         Subcategory subcategory = this.subcategoryRepository.findOne(questionBindingModel.getSubcategoryId());
 
         Question questionEntity = new Question(
                         questionBindingModel.getTitle(),
                         questionBindingModel.getContent(),
                         userEntity,
+                        category,
                         subcategory
         );
 

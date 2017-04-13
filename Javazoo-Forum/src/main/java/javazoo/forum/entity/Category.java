@@ -11,11 +11,11 @@ public class Category {
     private String name;
     private Integer orderNo;
     private Set<Subcategory> subcategories;
-   // private Set<Question> questions;
+    private Set<Question> questions;
 
     public Category(){
         this.subcategories = new HashSet<>();
-        //this.questions = new HashSet<>();
+        this.questions = new HashSet<>();
     }
 
     public Category(String name, Integer orderNo){
@@ -23,7 +23,7 @@ public class Category {
         this.orderNo = orderNo;
 
         this.subcategories = new HashSet<>();
-        //this.questions= new HashSet<>();
+        this.questions= new HashSet<>();
     }
 
     @Id
@@ -63,12 +63,12 @@ public class Category {
         this.subcategories = subcategories;
     }
 
-//    @OneToMany(mappedBy = "category")
-//    public Set<Question> getQuestions() {
-//        return questions;
-//    }
-//
-//    public void setQuestions(Set<Question> questions) {
-//        this.questions = questions;
-//    }
+    @OneToMany(mappedBy = "category")
+    public Set<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Set<Question> questions) {
+        this.questions = questions;
+    }
 }
