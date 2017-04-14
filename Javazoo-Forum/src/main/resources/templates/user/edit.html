@@ -1,50 +1,61 @@
 <main>
     <div class="container body-content span=8 offset=2">
         <div class="well">
-            <form class="form-horizontal" th:action="@{/edit/{id}(id=${user.id})}" method="post">
+            <form class="form-horizontal" th:action="@{/edit/{id}(id=${user.id})}" enctype="multipart/form-data" method="post">
                 <fieldset>
                     <legend>Edit Profile</legend>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Username</label>
-                        <div class="col-sm-4 ">
-                            <h4>
-                                <span th:text="${user.username}"></span>
-                            </h4>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="user_image">Image</label>
+                            <div class="col-sm-3 ">
+                                <img th:src="${user.imagePath}" alt="User Image"/>
+                            </div>
+                            <div class="col-sm-3 ">
+                                <input class="form-control" type="file" id="user_image" placeholder="Image" name="image"/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label" for="user_email">Email</label>
-                        <div class="col-sm-4 ">
-                            <input class="form-control" type="email" id="user_email" placeholder="Email" name="email"
-                                   required="required" th:value="${user.email}"/>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Username</label>
+                            <div class="col-sm-4 ">
+                                <h4>
+                                    <span th:text="${user.username}"></span>
+                                </h4>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label" for="user_fullname">Full Name</label>
-                        <div class="col-sm-4 ">
-                            <input class="form-control" type="text" id="user_fullname" placeholder="Full Name"
-                                   name="fullName" required="required" th:value="${user.fullName}"/>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="user_email">Email</label>
+                            <div class="col-sm-4 ">
+                                <input class="form-control" type="email" id="user_email" placeholder="Email" name="email"
+                                       required="required" th:value="${user.email}"/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label" for="user_password_first">New Password</label>
-                        <div class="col-sm-4">
-                            <input type="password" class="form-control" id="user_password_first" placeholder="Password"
-                                   name="password"/>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="user_fullname">Full Name</label>
+                            <div class="col-sm-4 ">
+                                <input class="form-control" type="text" id="user_fullname" placeholder="Full Name"
+                                       name="fullName" required="required" th:value="${user.fullName}"/>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label" for="user_password_second">Confirm New Password</label>
-                        <div class="col-sm-4">
-                            <input type="password" class="form-control" id="user_password_second" placeholder="Password"
-                                   name="confirmPassword"/>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="user_password_first">New Password</label>
+                            <div class="col-sm-4">
+                                <input type="password" class="form-control" id="user_password_first" placeholder="Password"
+                                       name="password"/>
+                            </div>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" for="user_password_second">Confirm New Password</label>
+                            <div class="col-sm-4">
+                                <input type="password" class="form-control" id="user_password_second" placeholder="Password"
+                                       name="confirmPassword"/>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-4">
-                            <a class="btn btn-default" th:href="@{/}">Cancel</a>
-                            <input value="Save" type="submit" class="btn btn-success"/>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-4">
+                                <a class="btn btn-default" th:href="@{/}">Cancel</a>
+                                <input value="Save" type="submit" class="btn btn-success"/>
+                            </div>
                         </div>
                     </div>
                 </fieldset>

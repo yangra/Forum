@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
 @Controller
 @Transactional
@@ -122,6 +125,29 @@ public class UserController {
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
                 user.setPassword(bCryptPasswordEncoder.encode(userBindingModel.getPassword()));
+            }
+        }
+
+        String databaseImagePath = null;
+
+        String[] allowedContentTypes = {
+                "image/png",
+                "image/jpeg",
+                "image/jpg"
+        };
+
+        boolean isContentTypeAllowed = Arrays.asList(allowedContentTypes).contains(userBindingModel.getImage().getContentType());
+
+        if (isContentTypeAllowed) {
+            String imagePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\";
+            String filename = userBindingModel.getImage().getOriginalFilename();
+            String savePath = imagePath + filename;
+            File imageFile = new File(savePath);
+            try {
+                userBindingModel.getImage().transferTo(imageFile);
+                databaseImagePath = "/images/" + filename;
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
         }
 

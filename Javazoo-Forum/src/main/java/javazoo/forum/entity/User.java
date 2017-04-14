@@ -18,12 +18,14 @@ public class User {
     private Set<Role> roles;
     private Set<Question> questions;
     private Set<Answer> answers;
+    private String imagePath;
 
     public User(String username, String email, String fullName, String password){
         this.username = username;
         this.email = email;
         this.password = password;
         this.fullName = fullName;
+        this.imagePath = "/images/default.png";
 
         this.roles = new HashSet<>();
         this.questions = new HashSet<>();
@@ -129,5 +131,13 @@ public class User {
     public boolean isAuthor(Answer answer) {
         return Objects.equals(this.getId(),
         answer.getAuthor().getId());
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }
