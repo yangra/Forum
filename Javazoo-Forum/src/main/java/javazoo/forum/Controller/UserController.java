@@ -1,6 +1,7 @@
-package javazoo.forum.controller;
+package javazoo.forum.Controller;
 
 import javazoo.forum.bindingModel.UserBindingModel;
+import javazoo.forum.bindingModel.UserEditBindingModel;
 import javazoo.forum.entity.Role;
 import javazoo.forum.entity.User;
 import javazoo.forum.repository.RoleRepository;
@@ -14,10 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -95,6 +94,43 @@ public class UserController {
         model.addAttribute("view", "user/profile");
 
         return "base-layout";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editProfile(@PathVariable Integer id, Model model) {
+
+        User user = this.userRepository.findOne(id);
+
+        model.addAttribute("user", user);
+        model.addAttribute("view", "user/edit");
+
+        return "base-layout";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editProfileProcess(UserEditBindingModel userBindingModel) {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        User user = this.userRepository.findByUsername(principal.getUsername());
+
+        if (!StringUtils.isEmpty(userBindingModel.getPassword())
+                && !StringUtils.isEmpty(userBindingModel.getConfirmPassword())) {
+
+            if (userBindingModel.getPassword().equals((userBindingModel.getConfirmPassword()))) {
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+                user.setPassword(bCryptPasswordEncoder.encode(userBindingModel.getPassword()));
+            }
+        }
+
+        user.setFullName(userBindingModel.getFullName());
+        user.setEmail(userBindingModel.getEmail());
+
+        this.userRepository.saveAndFlush(user);
+
+        return "redirect:/";
     }
 
 }
