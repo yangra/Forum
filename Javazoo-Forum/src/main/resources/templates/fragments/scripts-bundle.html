@@ -1,5 +1,6 @@
 <script th:src="@{/scripts/jquery-3.2.0.js}"></script>
 <script th:src="@{/scripts/bootstrap.min.js}"></script>
+<script th:src="@{/scripts/jquery-sortable.min.js}"></script>
 <script type="text/javascript">
     function sendAjaxRequest(){
         var catId = $("#category_select").val();
@@ -13,4 +14,28 @@
             });
         });
     };
+
+    var listOrder = {
+        saveList: function (id) {
+            var listCSV = "";
+            $(".index"+id).each(function () {
+                if (listCSV === "") {
+                    listCSV = $(this).val();
+                } else {
+                    listCSV += "," + $(this).val();
+                }
+                $("#hiddenListInput"+id).val(listCSV);
+                $("#listSaveForm"+id).submit();
+            });
+        }
+    }
+
+    $(function sortable() {
+        $('.sorted_table').sortable({
+            containerSelector: 'table',
+            itemPath: '> tbody',
+            itemSelector: 'tr',
+            placeholder: '<tr class="placeholder"/>'
+        });
+    });
 </script>

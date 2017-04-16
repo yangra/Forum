@@ -8,8 +8,6 @@ public class SubcategoryBindingModel {
     private Integer categoryId;
     @NotNull
     private String name;
-    @NotNull
-    private Integer orderNo;
 
     public Integer getCategoryId() {
         return categoryId;
@@ -27,11 +25,4 @@ public class SubcategoryBindingModel {
         this.name = name;
     }
 
-    public Integer getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(Integer orderNo) {
-        this.orderNo = orderNo;
-    }
 }

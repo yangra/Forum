@@ -1,11 +1,11 @@
 <main>
     <div class="container body-content">
         <div class="well">
-            <h2>All Categories -
+            <h2>Categories -
                 <a th:href="@{/admin/categories/create}" class="btn btn-warning">Create New</a>
             </h2>
             <div class="row">
-                <table class="table table-striped table-hover ">
+                <table class="table table-striped table-hover sorted_table" id="sortable" onload="sortable()">
                     <thead>
                     <tr>
                         <th>OrderNo</th>
@@ -15,7 +15,8 @@
                     </thead>
                     <tbody>
 
-                    <tr th:each="category : ${categories}">
+                    <tr  th:each="category : ${categories}" >
+                        <input class="index" type="hidden" th:value="${category.id}"/>
                         <td th:text="${category.orderNo}"></td>
                         <td th:text="${category.name}"></td>
                         <td>
@@ -25,6 +26,10 @@
                     </tr>
                     </tbody>
                 </table>
+                <input type="button" value="Save Order" onclick="listOrder.saveList('');"/>
+                <form id="listSaveForm" method="POST" th:action="@{/admin/categories/}">
+                    <input type="hidden" name="list" id="hiddenListInput" />
+                </form>
             </div>
         </div>
     </div>

@@ -18,9 +18,9 @@ public class Category {
         this.questions = new HashSet<>();
     }
 
-    public Category(String name, Integer orderNo){
+    public Category(String name){
         this.name = name;
-        this.orderNo = orderNo;
+        this.orderNo = 5;
 
         this.subcategories = new HashSet<>();
         this.questions= new HashSet<>();

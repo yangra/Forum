@@ -11,3 +11,34 @@ h2 {
 section {
     margin-top: 40px ;
 }
+
+body.dragging, body.dragging * {
+    cursor: move !important;
+}
+
+.dragged {
+    position: absolute;
+    opacity: 0.5;
+    z-index: 2000;
+}
+
+ul.sortable li.placeholder {
+    position: relative;
+    /** More li styles **/
+}
+ul.sortable li.placeholder:before {
+    position: absolute;
+    /** Define arrowhead **/
+}
+#sortable {
+    cursor: move;
+}
+
+span.categories{
+    display: inline-block;
+    width: 190px;
+}
+span.categories.badge{
+    display: inline-block;
+    width: 30px;
+}

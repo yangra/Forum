@@ -1,5 +1,6 @@
 package javazoo.forum.controller.admin;
 
+import javazoo.forum.bindingModel.CategoryOrderEditBindingModel;
 import javazoo.forum.bindingModel.SubcategoryBindingModel;
 import javazoo.forum.entity.Category;
 import javazoo.forum.entity.Subcategory;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -32,14 +34,26 @@ public class AdminSubcategoryController {
     @GetMapping("/")
     public String list(Model model){
 
-        List<Subcategory> subcategories = this.subcategoryRepository.findAll();
-        Comparator<Subcategory> comparator = Comparator.comparing(subcategory-> subcategory.getCategory().getName());
-        comparator = comparator.thenComparing(Comparator.comparing(subcategory -> subcategory.getOrderNo()));
-        subcategories.sort(comparator);
+        List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
+        List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
 
+        model.addAttribute("categories", categories);
         model.addAttribute("subcategories", subcategories);
         model.addAttribute("view", "admin/subcategory/list");
         return "base-layout";
+    }
+
+    @PostMapping("/")
+    public String changeOrderSubcategories(CategoryOrderEditBindingModel categoryOrderEditBindingModel){
+
+        int[] order = Arrays.stream(categoryOrderEditBindingModel.getList().split(",")).mapToInt(Integer::parseInt).toArray();
+        for(int i = 1; i<=order.length;i++){
+            Subcategory subcategory = this.subcategoryRepository.findOne(order[i-1]);
+            subcategory.setOrderNo(i);
+            this.subcategoryRepository.saveAndFlush(subcategory);
+        }
+
+        return "redirect:/admin/subcategories/";
     }
 
     @GetMapping("/create")
@@ -59,12 +73,9 @@ public class AdminSubcategoryController {
             return "redirect:/admin/subcategories/create";
         }
 
-        if(subcategoryBindingModel.getOrderNo() == null){
-            return "redirect:/admin/subcategories/create";
-        }
+
         Category category = this.categoryRepository.findOne(subcategoryBindingModel.getCategoryId());
-        Subcategory subcategory = new Subcategory(subcategoryBindingModel.getName(),
-                subcategoryBindingModel.getOrderNo(),category);
+        Subcategory subcategory = new Subcategory(subcategoryBindingModel.getName(),category);
 
         this.subcategoryRepository.saveAndFlush(subcategory);
 
