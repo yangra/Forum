@@ -19,6 +19,8 @@ public class QuestionBindingModel {
     @NotNull
     private Integer subcategoryId;
 
+    private String tagString;
+
     public String getTitle() {
         return title;
     }
@@ -49,5 +51,14 @@ public class QuestionBindingModel {
 
     public void setSubcategoryId(Integer subcategoryId) {
         this.subcategoryId = subcategoryId;
+    }
+
+
+    public String getTagString() {
+        return tagString;
+    }
+
+    public void setTagString(String tagString) {
+        this.tagString = tagString;
     }
 }

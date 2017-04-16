@@ -18,8 +18,10 @@ public class Question {
     private Set<Answer> answers;
     private Category category;
     private Subcategory subcategory;
+    private  Set<Tag> tags;
 
-    public Question(String title, String content, User author, Category category, Subcategory subcategory){
+    public Question(String title, String content, User author, Category category,
+                    Subcategory subcategory, HashSet<Tag>tags){
         this.title = title;
         this.content = content;
         this.author = author;
@@ -27,6 +29,8 @@ public class Question {
         this.answers = new HashSet<>();
         this.category = category;
         this.subcategory = subcategory;
+
+        this.tags = tags;
     }
 
     public Question(){
@@ -109,4 +113,15 @@ public class Question {
     public void setSubcategory(Subcategory subcategory) {
         this.subcategory = subcategory;
     }
+
+    @ManyToMany()
+    @JoinColumn(table = "questions_tags")
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
 }

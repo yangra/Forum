@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -35,6 +36,9 @@ public class QuestionController {
 
     @Autowired
     private SubcategoryRepository subcategoryRepository;
+
+    @Autowired
+    private TagRepository tagRepository;
 
     @GetMapping("/question/create")
     @PreAuthorize("isAuthenticated()")
@@ -59,13 +63,15 @@ public class QuestionController {
         User userEntity = this.userRepository.findByUsername(user.getUsername());
         Category category = this.categoryRepository.findOne(questionBindingModel.getCategoryId());
         Subcategory subcategory = this.subcategoryRepository.findOne(questionBindingModel.getSubcategoryId());
+        HashSet<Tag> tags= this.findTagsFromString(questionBindingModel.getTagString());
 
         Question questionEntity = new Question(
                         questionBindingModel.getTitle(),
                         questionBindingModel.getContent(),
                         userEntity,
                         category,
-                        subcategory
+                        subcategory,
+                        tags
         );
 
         this.questionRepository.saveAndFlush(questionEntity);
@@ -195,5 +201,24 @@ public class QuestionController {
         User userEntity = this.userRepository.findByUsername(user.getUsername());
 
         return userEntity.isAdmin() || userEntity.isAuthor(question);
+    }
+
+    private HashSet<Tag> findTagsFromString(String tagString){
+
+        HashSet<Tag> tags = new HashSet<>();
+
+        String[] tagNames = tagString.split(",\\s*");
+
+        for (String tagName:tagNames) {
+            Tag currentTag = this.tagRepository.findByName(tagName);
+
+            if (currentTag==null){
+                currentTag = new Tag(tagName);
+                this.tagRepository.saveAndFlush(currentTag);
+            }
+
+            tags.add(currentTag);
+        }
+        return tags;
     }
 }
