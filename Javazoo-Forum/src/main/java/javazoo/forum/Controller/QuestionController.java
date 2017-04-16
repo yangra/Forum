@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @Transactional
@@ -130,8 +131,13 @@ public class QuestionController {
             return "redirect:/question/"+id;
         }
 
+        String tagString = question.getTags().stream()
+                .map(Tag::getName)
+                .collect(Collectors.joining(", "));
+
         model.addAttribute("view", "question/edit");
         model.addAttribute("question", question);
+        model.addAttribute("tags", tagString);
 
         return "base-layout";
     }
@@ -149,8 +155,11 @@ public class QuestionController {
             return "redirect:/question/"+id;
         }
 
+        HashSet<Tag> tags  =this.findTagsFromString(questionBindingModel.getTagString());
+
         question.setContent(questionBindingModel.getContent());
         question.setTitle(questionBindingModel.getTitle());
+        question.setTags(tags);
 
         this.questionRepository.saveAndFlush(question);
 
