@@ -43,3 +43,8 @@ Forum Administration
 
 Security
 	*User permission system - Email Address banning
+	
+- Pagination
+- Colors of the Edit and Delete buttons
+- Flash messages when illegal content is entered in all forms
+- mark the required fields in the forms
