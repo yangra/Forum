@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -51,6 +52,7 @@ public class AdminCategoryController {
 
         return "base-layout";
     }
+
     @PostMapping("/create")
     public String createProcess(CategoryBindingModel categoryBindingModel){
         if(StringUtils.isEmpty(categoryBindingModel.getName())){
@@ -62,7 +64,33 @@ public class AdminCategoryController {
         this.categoryRepository.saveAndFlush(category);
 
         return "redirect:/admin/categories/";
+    }
 
+    @GetMapping("/edit/{id}")
+    public String edit(Model model, @PathVariable Integer id){
+        if(!this.categoryRepository.exists(id)){
+            return "redirect:/admin/categories/";
+        }
 
+        Category category = this.categoryRepository.findOne(id);
+
+        model.addAttribute("category", category);
+        model.addAttribute("view", "admin/category/edit");
+
+        return "base-layout";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editProcess(@PathVariable Integer id, CategoryBindingModel categoryBindingModel){
+        if(!this.categoryRepository.exists(id)){
+            return "redirect:/admin/categories/";
+        }
+
+        Category category = this.categoryRepository.findOne(id);
+        category.setName(categoryBindingModel.getName());
+
+        this.categoryRepository.saveAndFlush(category);
+
+        return "redirect:/admin/categories/";
     }
 }
