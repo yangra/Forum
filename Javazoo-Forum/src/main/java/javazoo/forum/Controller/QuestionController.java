@@ -224,9 +224,11 @@ public class QuestionController {
 
     private HashSet<Tag> findTagsFromString(String tagString){
 
+        if ("".equals(tagString)) return null;
+
         HashSet<Tag> tags = new HashSet<>();
 
-        String[] tagNames = tagString.split(",\\s*");
+        String[] tagNames = tagString.split("[,\\s]+");
 
         for (String tagName:tagNames) {
             Tag currentTag = this.tagRepository.findByName(tagName);
