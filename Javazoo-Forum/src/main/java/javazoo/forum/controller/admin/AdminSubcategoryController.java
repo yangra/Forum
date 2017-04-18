@@ -3,6 +3,7 @@ package javazoo.forum.controller.admin;
 import javazoo.forum.bindingModel.CategoryOrderEditBindingModel;
 import javazoo.forum.bindingModel.SubcategoryBindingModel;
 import javazoo.forum.entity.Category;
+import javazoo.forum.entity.Question;
 import javazoo.forum.entity.Subcategory;
 import javazoo.forum.repository.CategoryRepository;
 import javazoo.forum.repository.QuestionRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -30,6 +32,9 @@ public class AdminSubcategoryController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @GetMapping("/")
     public String list(Model model){
@@ -81,4 +86,69 @@ public class AdminSubcategoryController {
 
         return "redirect:/admin/subcategories/";
     }
+
+    @GetMapping("/edit/{id}")
+    public String edit(Model model, @PathVariable Integer id){
+        if(!this.subcategoryRepository.exists(id)){
+            return "redirect:/admin/subcategories/";
+        }
+
+        Subcategory subcategory = this.subcategoryRepository.findOne(id);
+        List<Category> categories = this.categoryRepository.findAll();
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("subcategory", subcategory);
+        model.addAttribute("view", "admin/subcategory/edit");
+
+        return "base-layout";
+    }
+
+    @PostMapping("/edit/{id}")
+    public String editProcess(@PathVariable Integer id, SubcategoryBindingModel subcategoryBindingModel){
+        if(!this.subcategoryRepository.exists(id)){
+            return "redirect:/admin/subcategories/";
+        }
+
+        Subcategory subcategory = this.subcategoryRepository.findOne(id);
+        Category category = this.categoryRepository.findOne(subcategoryBindingModel.getCategoryId());
+        subcategory.setName(subcategoryBindingModel.getName());
+        subcategory.setCategory(category);
+
+        this.subcategoryRepository.saveAndFlush(subcategory);
+
+        return "redirect:/admin/subcategories/";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(Model model, @PathVariable Integer id){
+        if(!this.subcategoryRepository.exists(id)){
+            return "redirect:/admin/subcategories/";
+        }
+
+        Subcategory subcategory = this.subcategoryRepository.findOne(id);
+
+        model.addAttribute("subcategory", subcategory);
+        model.addAttribute("category", subcategory.getCategory());
+        model.addAttribute("view", "admin/subcategory/delete");
+
+        return "base-layout";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteProcess(@PathVariable Integer id){
+        if(!this.subcategoryRepository.exists(id)){
+            return "redirect:/admin/subcategories/";
+        }
+
+        Subcategory subcategory = this.subcategoryRepository.findOne(id);
+
+        for(Question question:subcategory.getQuestions()){
+            this.questionRepository.delete(question);
+        }
+
+        this.subcategoryRepository.delete(subcategory);
+
+        return "redirect:/admin/subcategories/";
+    }
+
 }

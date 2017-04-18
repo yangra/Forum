@@ -2,8 +2,14 @@ package javazoo.forum.controller.admin;
 
 import javazoo.forum.bindingModel.CategoryBindingModel;
 import javazoo.forum.bindingModel.CategoryOrderEditBindingModel;
+import javazoo.forum.entity.Answer;
 import javazoo.forum.entity.Category;
+import javazoo.forum.entity.Question;
+import javazoo.forum.entity.Subcategory;
+import javazoo.forum.repository.AnswersRepository;
 import javazoo.forum.repository.CategoryRepository;
+import javazoo.forum.repository.QuestionRepository;
+import javazoo.forum.repository.SubcategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +28,11 @@ public class AdminCategoryController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+    @Autowired
+    private SubcategoryRepository subcategoryRepository;
+    @Autowired
+    private QuestionRepository questionRepository;
+
 
     @GetMapping("/")
     public String list(Model model){
@@ -90,6 +101,41 @@ public class AdminCategoryController {
         category.setName(categoryBindingModel.getName());
 
         this.categoryRepository.saveAndFlush(category);
+
+        return "redirect:/admin/categories/";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(Model model, @PathVariable Integer id){
+        if(!this.categoryRepository.exists(id)){
+            return "redirect:/admin/categories/";
+        }
+
+        Category category = this.categoryRepository.findOne(id);
+
+        model.addAttribute("category", category);
+        model.addAttribute("view", "admin/category/delete");
+
+        return "base-layout";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteProcess(@PathVariable Integer id){
+        if(!this.categoryRepository.exists(id)){
+            return "redirect:/admin/categories/";
+        }
+
+        Category category = this.categoryRepository.findOne(id);
+
+        for(Question question:category.getQuestions()){
+            this.questionRepository.delete(question);
+        }
+
+        for(Subcategory subcategory:category.getSubcategories()){
+            this.subcategoryRepository.delete(subcategory);
+        }
+
+        this.categoryRepository.delete(category);
 
         return "redirect:/admin/categories/";
     }
