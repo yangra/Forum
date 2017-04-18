@@ -1,31 +1,49 @@
 <main>
     <div class="container body-content">
         <h1>Search by Tag - <th:block th:text="${tag.name}"></th:block></h1>
+        <br/>
         <div class="row">
             <th:block th:each="question : ${tag.questions}">
-                <div class="col-md-6">
+                <div class="col-md-9">
                     <article>
-                        <header>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
                             <h2 th:text="${question.title}"></h2>
-                        </header>
-
-                        <small class="author" th:text="${question.author.username}"></small>
-
-                        <p>
-                            <a class="btn btn-default btn-xs" th:each="tag:${question.tags}"
-                               th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>
-                        </p>
-
-
-                        <footer>
-                            <div class="pull-right">
-                                <a class="btn btn-default btn-xs"
-                                   th:href="@{/question/{id}(id=${question.id})}">Read more &raquo;</a>
                             </div>
-                        </footer>
-                        <p>
-                            <br/>
-                        </p>
+
+                            <div class="panel-body">
+                                <div class="col-md-2" style="border-right: 1px solid lightgray">
+                                        Created by:<br/>
+                                        <span th:text="${question.author.username}"></span><br/>
+                                        <span th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
+                                </div>
+
+                                <div class="col-md-10">
+                                    <p th:text="${question.content}"></p>
+                                </div>
+
+                            </div>
+
+                            <div class="panel-footer">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <a class="btn btn-default btn-xs" th:each="tag:${question.tags}"
+                                           th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>
+
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="pull-right">
+                                            <a class="btn btn-default btn-xs"
+                                               th:href="@{/question/{id}(id=${question.id})}">Read more &raquo;</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
                     </article>
                 </div>
             </th:block>
