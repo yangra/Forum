@@ -27,7 +27,7 @@ public class HomeController {
     public String index(Model model){
 
         List<Category> categories = categoryRepository.findAllByOrderByOrderNoAsc();
-        List<Question> questions = this.questionRepository.findAll();
+        List<Question> questions = this.questionRepository.findAllByOrderByCreationDateDesc();
 
         model.addAttribute("view", "home/index");
         model.addAttribute("questions", questions);
