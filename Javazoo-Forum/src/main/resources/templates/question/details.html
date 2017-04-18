@@ -49,13 +49,15 @@
                                        th:href="@{/question/{qId}/answer/create(qId=${question.id})}">Answer &raquo;</a>
                                 </th:block>
                             </div>
+
                             <div class="col-md-5">
+                                <p th:if="${!question.tags.isEmpty()}">
                                 Tags:
-                                <p>
                                     <a class="btn btn-default btn-xs" th:each="tag:${question.tags}"
                                        th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>
                                 </p>
                             </div>
+
                             <div class="col-md-5">
                                 <a href="#">
                                     Category of the post
