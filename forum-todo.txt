@@ -48,3 +48,4 @@ Security
 - Colors of the Edit and Delete buttons
 - Flash messages when illegal content is entered in all forms
 - mark the required fields in the forms
+- Validateion for empty fields of title or content
