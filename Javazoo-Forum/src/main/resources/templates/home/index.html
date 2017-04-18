@@ -40,6 +40,10 @@
                                             Category of the post
                                         </a>
                                         <br/><br/>
+                                        <a class="btn btn-default btn-xs" th:each="tag:${question.tags}"
+                                           th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>
+
+                                        <br/><br/>
                                         Answers: 43
                                     </div>
                                     <div class="col-md-4 ">

@@ -51,8 +51,10 @@
                             </div>
                             <div class="col-md-5">
                                 Tags:
-                                <a href="#" class="label label-default"> Programming</a>
-                                <a href="#" class="label label-default"> Infrastructure</a>
+                                <p>
+                                    <a class="btn btn-default btn-xs" th:each="tag:${question.tags}"
+                                       th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>
+                                </p>
                             </div>
                             <div class="col-md-5">
                                 <a href="#">
