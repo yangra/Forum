@@ -1,0 +1,23 @@
+<aside class="col-md-3">
+    <div id="MainMenu">
+        <h2>Categories</h2>
+        <div class="list-group panel">
+            <th:block th:each="category:${categories}">
+                <a th:href="'/categories/'+${category.id}" th:attr="data-target='#' + ${category.id}"
+                   class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="MainMenu">
+                    <span th:text="${category.name}"></span>
+                </a>
+                <div class="collapse" th:id="${category.id}"
+                     th:classappend="(${category.id.equals(categoryId)})?in:out">
+                    <th:block th:each="subcategory:${subcategories}" th:if="${subcategory.category.equals(category)}">
+                        <a th:href="'/categories/' + ${category.id} + '/' + ${subcategory.id}" class="list-group-item"
+                           th:classappend="(${subcategory.id.equals(subcategoryId)})?active:out">
+                            <span th:text="${subcategory.name}"></span>
+                            <span th:text="${subcategory.questions.size()}"  class="badge"></span>
+                        </a>
+                    </th:block>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</aside>

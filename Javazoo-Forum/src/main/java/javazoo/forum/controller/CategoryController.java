@@ -37,43 +37,29 @@ public class CategoryController {
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
         List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
         Category category = this.categoryRepository.findOne(id);
-        List<Question> questions = new ArrayList<>();
-        for(Subcategory subcategory:category.getSubcategories()) {
-            List<Question> subQuestions = this.questionRepository.findAllBySubcategory(subcategory);
-            for(int i=0;i<subQuestions.size();i++){
-                questions.add(subQuestions.get(i));
-            }
-        }
-//        Collections.sort(questions, (Question q1, Question q2) -> q2.getCreationDate().compareTo(q1.getCreationDate()));
-//        Collections.sort(questions, new Comparator<Question>() {
-//            public int compare(Question o1, Question o2) {
-//                return o2.getCreationDate().compareTo(o1.getCreationDate());
-//            }
-//        });
-
-        questions = questions.stream().sorted(Comparator.comparing(Question::getCreationDate).reversed()).collect(Collectors.toList());
+        List<Question> questions = this.questionRepository.findByCategoryOrderByCreationDateDesc(category);
 
         model.addAttribute("categories", categories);
         model.addAttribute("questions", questions);
         model.addAttribute("subcategories", subcategories);
-        model.addAttribute("catId", id);
+        model.addAttribute("categoryId", id);
         model.addAttribute("view", "categories/categories");
         return "base-layout";
     }
 
-    @GetMapping("categories/{catId}/{subId}")
-    public String openSubCategory(@PathVariable Integer catId, @PathVariable Integer subId, Model model){
+    @GetMapping("categories/{categoryId}/{subcategoryId}")
+    public String openSubCategory(@PathVariable Integer categoryId, @PathVariable Integer subcategoryId, Model model){
 
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
         List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
-        Subcategory subcategory = this.subcategoryRepository.findOne(subId);
+        Subcategory subcategory = this.subcategoryRepository.findOne(subcategoryId);
         List<Question> questions = this.questionRepository.findBySubcategoryOrderByCreationDateDesc(subcategory);
 
         model.addAttribute("categories", categories);
         model.addAttribute("subcategories", subcategories);
         model.addAttribute("questions", questions);
-        model.addAttribute("catId", catId);
-        model.addAttribute("subId", subId);
+        model.addAttribute("categoryId", categoryId);
+        model.addAttribute("subcategoryId", subcategoryId);
         model.addAttribute("view", "categories/categories");
         return "base-layout";
     }

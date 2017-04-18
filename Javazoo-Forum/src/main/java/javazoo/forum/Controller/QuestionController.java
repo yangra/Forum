@@ -131,6 +131,9 @@ public class QuestionController {
             return "redirect:/question/"+id;
         }
 
+        List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
+        List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
+
         String tagString = question.getTags().stream()
                 .map(Tag::getName)
                 .collect(Collectors.joining(", "));
@@ -138,6 +141,8 @@ public class QuestionController {
         model.addAttribute("view", "question/edit");
         model.addAttribute("question", question);
         model.addAttribute("tags", tagString);
+        model.addAttribute("categories", categories);
+        model.addAttribute("subcategories", subcategories);
 
         return "base-layout";
     }
@@ -155,10 +160,15 @@ public class QuestionController {
             return "redirect:/question/"+id;
         }
 
-        HashSet<Tag> tags  =this.findTagsFromString(questionBindingModel.getTagString());
+        Category category = this.categoryRepository.findOne(questionBindingModel.getCategoryId());
+        Subcategory subcategory = this.subcategoryRepository.findOne(questionBindingModel.getSubcategoryId());
+
+        HashSet<Tag> tags = this.findTagsFromString(questionBindingModel.getTagString());
 
         question.setContent(questionBindingModel.getContent());
         question.setTitle(questionBindingModel.getTitle());
+        question.setCategory(category);
+        question.setSubcategory(subcategory);
         question.setTags(tags);
 
         this.questionRepository.saveAndFlush(question);
