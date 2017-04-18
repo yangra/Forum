@@ -57,7 +57,34 @@ public class QuestionController {
 
     @PostMapping("/question/create")
     @PreAuthorize("isAuthenticated()")
-    public String createProcess(QuestionBindingModel questionBindingModel){
+    public String createProcess(QuestionBindingModel questionBindingModel,Model model){
+
+        if(questionBindingModel.getTitle().equals("")){
+
+            List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
+            List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
+            String error = "Please enter a valid title";
+            model.addAttribute("error", error);
+            model.addAttribute("content", questionBindingModel.getContent());
+            model.addAttribute("categories", categories);
+            model.addAttribute("subcategories", subcategories);
+            model.addAttribute("view", "/question/create");
+            return "base-layout";
+        }
+
+        if(questionBindingModel.getContent().equals("")){
+
+            List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
+            List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
+            String error = "Please enter a valid content";
+            model.addAttribute("error", error);
+            model.addAttribute("title", questionBindingModel.getTitle());
+            model.addAttribute("categories", categories);
+            model.addAttribute("subcategories", subcategories);
+            model.addAttribute("view", "/question/create");
+            return "base-layout";
+        }
+
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
 

@@ -5,18 +5,19 @@
                 <fieldset>
                     <legend>New Question</legend>
 
+                    <p th:if="${error}" th:text="${error}" style="color: red; text-align: center;" ></p>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="question_title">Question Title</label>
                         <div class="col-sm-4 ">
                             <input type="text" class="form-control" id="question_title" placeholder="Question Title"
-                                   name="title"/>
+                                   name="title" th:value="${title}"/>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="question_content">Content</label>
                         <div class="col-sm-6">
-                            <textarea class="form-control" rows="6" id="question_content" name="content"></textarea>
+                            <textarea class="form-control" rows="6" id="question_content" name="content" th:text="${content}" ></textarea>
                         </div>
                     </div>
 
