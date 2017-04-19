@@ -50,11 +50,14 @@ public class UserController {
 
        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
+       String databaseImagePath ="/images/default.png";
+
        User user = new User(
                userBindingModel.getUsername(),
                userBindingModel.getEmail(),
                userBindingModel.getFullName(),
-               bCryptPasswordEncoder.encode(userBindingModel.getPassword())
+               bCryptPasswordEncoder.encode(userBindingModel.getPassword()),
+               databaseImagePath
        );
 
        Role userRole = this.roleRepository.findByName("ROLE_USER");

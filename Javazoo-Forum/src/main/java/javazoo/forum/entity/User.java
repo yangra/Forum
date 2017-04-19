@@ -20,12 +20,12 @@ public class User {
     private Set<Answer> answers;
     private String imagePath;
 
-    public User(String username, String email, String fullName, String password){
+    public User(String username, String email, String fullName, String password, String imagePath){
         this.username = username;
         this.email = email;
         this.password = password;
         this.fullName = fullName;
-        this.imagePath = "/images/default.png";
+        this.imagePath = imagePath;
 
         this.roles = new HashSet<>();
         this.questions = new HashSet<>();

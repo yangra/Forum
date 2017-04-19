@@ -16,11 +16,12 @@ public class ForumUserDetails extends User implements UserDetails{
     private User user;
 
     public ForumUserDetails(User user, ArrayList<String> roles){
-        super(user.getUsername(),user.getEmail(), user.getFullName(), user.getPassword());
+        super(user.getUsername(),user.getEmail(), user.getFullName(), user.getPassword(), user.getImagePath());
 
         this.roles = roles;
         this.user = user;
     }
+
     public User getUser(){
         return this.user;
     }
