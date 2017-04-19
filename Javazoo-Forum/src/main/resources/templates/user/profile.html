@@ -6,8 +6,15 @@
                     <legend>Profile</legend>
                     <div class="col-sm-4">
                         <img th:src="${user.imagePath}" alt="User Image"/>
+                        <p></p>
+                        <label class="control-label">User created on:</label>
+                        <span th:text="${#dates.format(user.creationDate, 'dd.MM.yyyy HH:mm:ss')}"></span>
+                        <p></p>
+                        <label class="control-label">Questions:</label>
+                        <p></p>
+                        <label class="control-label">Answers:</label>
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <label class="col-sm-3 control-label">Username</label>
                             <div class="col-sm-5 ">

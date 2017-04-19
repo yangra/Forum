@@ -1,8 +1,11 @@
 package javazoo.forum.entity;
 
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.lang.invoke.SerializedLambda;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -19,6 +22,7 @@ public class User {
     private Set<Question> questions;
     private Set<Answer> answers;
     private String imagePath;
+    private Date creationDate;
 
     public User(String username, String email, String fullName, String password, String imagePath){
         this.username = username;
@@ -26,6 +30,7 @@ public class User {
         this.password = password;
         this.fullName = fullName;
         this.imagePath = imagePath;
+        this.creationDate = new Date();
 
         this.roles = new HashSet<>();
         this.questions = new HashSet<>();
@@ -139,5 +144,15 @@ public class User {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    @Column
+    @Type(type = "timestamp")
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 }
