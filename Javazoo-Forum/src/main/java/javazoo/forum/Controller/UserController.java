@@ -156,6 +156,7 @@ public class UserController {
 
         user.setFullName(userBindingModel.getFullName());
         user.setEmail(userBindingModel.getEmail());
+        user.setImagePath(databaseImagePath);
 
         this.userRepository.saveAndFlush(user);
 
