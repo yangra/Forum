@@ -4,36 +4,40 @@
             <form class="form-horizontal" th:action="@{/user/profile/}" method="post">
                 <fieldset>
                     <legend>Profile</legend>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Username</label>
-                        <div class="col-sm-4 ">
-                            <h4>
-                                <span th:text="${user.username}"></span>
-                            </h4>
-                        </div>
+                    <div class="col-sm-4">
+                        <img th:src="${user.imagePath}" alt="User Image"/>
                     </div>
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Username</label>
+                            <div class="col-sm-5 ">
+                                <h4>
+                                    <span th:text="${user.username}"></span>
+                                </h4>
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Email</label>
-                        <div class="col-sm-4 ">
-                            <h5>
-                                <span th:text="${user.email}"></span>
-                            </h5>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Email</label>
+                            <div class="col-sm-5 ">
+                                <h5>
+                                    <span th:text="${user.email}"></span>
+                                </h5>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">Full Name</label>
-                        <div class="col-sm-4 ">
-                            <h5>
-                                <span th:text="${user.fullName}"></span>
-                            </h5>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Full Name</label>
+                            <div class="col-sm-5 ">
+                                <h5>
+                                    <span th:text="${user.fullName}"></span>
+                                </h5>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-4">
-                            <a class="btn btn-default" th:href="@{/}">Cancel</a>
-                            <!--<input value="Edit" type="submit" class="btn btn-success"/>-->
-                            <a class="btn btn-success" th:href="@{/edit/{id}(id=${user.id})}">Edit</a>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-3">
+                                <a class="btn btn-default" th:href="@{/}">Cancel</a>
+                                <a class="btn btn-success" th:href="@{/edit/{id}(id=${user.id})}">Edit</a>
+                            </div>
                         </div>
                     </div>
                 </fieldset>

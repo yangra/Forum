@@ -4,16 +4,19 @@
             <form class="form-horizontal" th:action="@{/edit/{id}(id=${user.id})}" enctype="multipart/form-data" method="post">
                 <fieldset>
                     <legend>Edit Profile</legend>
-                    <div class="row">
+                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label" for="user_image">Image</label>
-                            <div class="col-sm-3 ">
+                            <div>
                                 <img th:src="${user.imagePath}" alt="User Image"/>
-                            </div>
-                            <div class="col-sm-3 ">
-                                <input class="form-control" type="file" id="user_image" placeholder="Image" name="image"/>
+                                <p></p>
+                                <div class="col-sm-8">
+                                    <input class="form-control" type="file" id="user_image" placeholder="Image" name="image"/>
+                                </div>
+
                             </div>
                         </div>
+                    </div>
+                    <div class="col-sm-8">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Username</label>
                             <div class="col-sm-4 ">
