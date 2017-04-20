@@ -1,52 +1,72 @@
 <main>
-    <div class="container body-content">
-        <h1>Search by Tag - <th:block th:text="${tag.name}"></th:block></h1>
-        <br/>
-        <div class="row">
-            <th:block th:each="question : ${tag.questions}">
-                <div class="col-md-9">
-                    <article>
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                            <h2 th:text="${question.title}"></h2>
-                            </div>
 
-                            <div class="panel-body">
-                                <div class="col-md-2" style="border-right: 1px solid lightgray">
-                                        Created by:<br/>
-                                        <span th:text="${question.author.username}"></span><br/>
-                                        <span th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
+    <div class="container">
+        <aside class="col-sm-3">
+            <div id="MainMenu">
+                <h2>Categories</h2>
+                <div class="list-group panel">
+                    <th:block th:each="category:${categories}">
+                        <a th:href="'/categories/'+${category.id}" th:attr="data-target='#' + ${category.id}"
+                           class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="MainMenu">
+                            <span th:text="${category.name}"></span>
+                        </a>
+
+                    </th:block>
+                </div>
+            </div>
+        </aside>
+        <!--<section class="col-sm-9">-->
+            <!--<h1>Search by Tag - <th:block th:text="${tag.name}"></th:block></h1>-->
+        <!--</section>-->
+
+
+        <section class="col-md-9 container body-content">
+            <div class="row">
+                <th:block th:each="question : ${tag.questions}">
+                    <div class="col-md-9 col-md-offset-2">
+                        <article>
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <a th:href="@{/question/{id}(id=${question.id})}"><h3 class="panel-title"
+                                                                                          th:text="${question.title}"></h3>
+                                    </a>
                                 </div>
-
-                                <div class="col-md-10">
-                                    <p th:text="${question.content}"></p>
-                                </div>
-
-                            </div>
-
-                            <div class="panel-footer">
-                                <div class="row">
+                                <div class="panel-body">
                                     <div class="col-md-4">
+                                        <a href="#">
+                                            Category of the post
+                                        </a>
+                                        <br/><br/>
                                         <a class="btn btn-default btn-xs" th:each="tag:${question.tags}"
                                            th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>
 
+                                        <br/><br/>
+                                        Answers: 43
                                     </div>
-
-                                    <div class="col-md-12">
-                                        <div class="pull-right">
-                                            <a class="btn btn-default btn-xs"
-                                               th:href="@{/question/{id}(id=${question.id})}">Read more &raquo;</a>
-                                        </div>
+                                    <div class="col-md-4 ">
+                                        Created by:<br/>
+                                        <span th:text="${question.author.username}"></span><br/>
+                                        <span th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
+                                    </div>
+                                    <div class="col-md-4 ">
+                                        Last activity:<br/>
+                                        author...<br/>
+                                        24/05/2016
                                     </div>
                                 </div>
                             </div>
+                        </article>
+                    </div>
 
-                        </div>
+                </th:block>
+            </div>
+
+        </section>
 
 
-                    </article>
-                </div>
-            </th:block>
-        </div>
+
+
+
     </div>
+
 </main>

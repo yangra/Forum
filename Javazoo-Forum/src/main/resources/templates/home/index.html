@@ -9,16 +9,7 @@
                            class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="MainMenu">
                             <span th:text="${category.name}"></span>
                         </a>
-                        <!--<div class="collapse" th:id="${category.id}"
-                             th:classappend="(${category.id.equals(catId)})?in:out">
-                            <th:block th:each="sub:${subs}" th:if="${sub.category.equals(category)}">
-                                <a th:href="'/categories/' + ${category.id} + '/' + ${sub.id}" class="list-group-item"
-                                   th:classappend="(${sub.id.equals(subId)})?active:out">
-                                    <span th:text="${sub.name}"></span>
-                                    <span th:text="${sub.questions.size()}" class="badge"></span>
-                                </a>
-                            </th:block>
-                        </div>-->
+
                     </th:block>
                 </div>
             </div>
