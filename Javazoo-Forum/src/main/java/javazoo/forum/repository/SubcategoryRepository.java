@@ -10,4 +10,5 @@ import java.util.List;
 public interface SubcategoryRepository extends JpaRepository<Subcategory,Integer> {
     List<Subcategory> findByCategory(Category category);
     List<Subcategory> findAllByOrderByOrderNoAsc();
+    Subcategory findByName(String name);
 }

@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,7 +37,7 @@ public class AdminCategoryController {
 
 
     @GetMapping("/")
-    public String list(Model model){
+    public String list(Model model) {
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
 
         model.addAttribute("categories", categories);
@@ -45,10 +47,10 @@ public class AdminCategoryController {
     }
 
     @PostMapping("/")
-    public String changeOrder(CategoryOrderEditBindingModel categoryOrderEditBindingModel){
+    public String changeOrder(CategoryOrderEditBindingModel categoryOrderEditBindingModel) {
         int[] order = Arrays.stream(categoryOrderEditBindingModel.getList().split(",")).mapToInt(Integer::parseInt).toArray();
-        for(int i = 1; i<=order.length;i++){
-            Category category = this.categoryRepository.findOne(order[i-1]);
+        for (int i = 1; i <= order.length; i++) {
+            Category category = this.categoryRepository.findOne(order[i - 1]);
             category.setOrderNo(i);
             this.categoryRepository.saveAndFlush(category);
         }
@@ -57,7 +59,7 @@ public class AdminCategoryController {
     }
 
     @GetMapping("/create")
-    public String create(Model model){
+    public String create(Model model) {
 
         model.addAttribute("view", "admin/category/create");
 
@@ -65,8 +67,12 @@ public class AdminCategoryController {
     }
 
     @PostMapping("/create")
-    public String createProcess(CategoryBindingModel categoryBindingModel){
-        if(StringUtils.isEmpty(categoryBindingModel.getName())){
+    public String createProcess(CategoryBindingModel categoryBindingModel, RedirectAttributes redirectAttributes) {
+
+        List<String> errors = validateCategoryName(categoryBindingModel);
+
+        if(!errors.isEmpty()){
+            redirectAttributes.addFlashAttribute("errors", errors);
             return "redirect:/admin/categories/create";
         }
 
@@ -78,8 +84,8 @@ public class AdminCategoryController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(Model model, @PathVariable Integer id){
-        if(!this.categoryRepository.exists(id)){
+    public String edit(Model model, @PathVariable Integer id) {
+        if (!this.categoryRepository.exists(id)) {
             return "redirect:/admin/categories/";
         }
 
@@ -92,9 +98,19 @@ public class AdminCategoryController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editProcess(@PathVariable Integer id, CategoryBindingModel categoryBindingModel){
-        if(!this.categoryRepository.exists(id)){
+    public String editProcess(@PathVariable Integer id,
+                              CategoryBindingModel categoryBindingModel,
+                              RedirectAttributes redirectAttributes) {
+
+        if (!this.categoryRepository.exists(id)) {
             return "redirect:/admin/categories/";
+        }
+
+        List<String> errors = validateCategoryName(categoryBindingModel);
+
+        if(!errors.isEmpty()){
+            redirectAttributes.addFlashAttribute("errors", errors);
+            return "redirect:/admin/categories/edit/"+id;
         }
 
         Category category = this.categoryRepository.findOne(id);
@@ -106,8 +122,8 @@ public class AdminCategoryController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(Model model, @PathVariable Integer id){
-        if(!this.categoryRepository.exists(id)){
+    public String delete(Model model, @PathVariable Integer id) {
+        if (!this.categoryRepository.exists(id)) {
             return "redirect:/admin/categories/";
         }
 
@@ -120,23 +136,37 @@ public class AdminCategoryController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteProcess(@PathVariable Integer id){
-        if(!this.categoryRepository.exists(id)){
+    public String deleteProcess(@PathVariable Integer id) {
+        if (!this.categoryRepository.exists(id)) {
             return "redirect:/admin/categories/";
         }
 
         Category category = this.categoryRepository.findOne(id);
 
-        for(Question question:category.getQuestions()){
+        for (Question question : category.getQuestions()) {
             this.questionRepository.delete(question);
         }
 
-        for(Subcategory subcategory:category.getSubcategories()){
+        for (Subcategory subcategory : category.getSubcategories()) {
             this.subcategoryRepository.delete(subcategory);
         }
 
         this.categoryRepository.delete(category);
 
         return "redirect:/admin/categories/";
+    }
+
+    private List<String> validateCategoryName(CategoryBindingModel categoryBindingModel) {
+        List<String> errors = new ArrayList<>();
+
+        if (StringUtils.isEmpty(categoryBindingModel.getName())) {
+            errors.add("Category name cannot be empty!");
+        }
+
+        if (categoryRepository.findByName(categoryBindingModel.getName()) != null) {
+            errors.add("Category with this name already exists!");
+        }
+
+        return errors;
     }
 }

@@ -77,10 +77,10 @@ public class AdminUserController {
 
         User user = this.userRepository.findOne(id);
 
-        List<String> error = validateAdminUserEdit(userEditBindingModel, user);
+        List<String> errors = validateAdminUserEdit(userEditBindingModel, user);
 
-        if (!error.isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", error);
+        if (!errors.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errors", errors);
             return "redirect:/admin/users/edit/" + id;
         }
 
@@ -137,17 +137,17 @@ public class AdminUserController {
 
     private List<String> validateAdminUserEdit(UserEditBindingModel userEditBindingModel, User principal) {
 
-        List<String> error = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
         if (userEditBindingModel.getFullName().equals("")) {
-            error.add("Full name cannot be empty!");
+            errors.add("Full name cannot be empty!");
         }
 
         if (userEditBindingModel.getEmail().equals("")) {
-            error.add("Email cannot be empty!");
+            errors.add("Email cannot be empty!");
         }
 
         if (userEditBindingModel.getUsername().equals("")) {
-            error.add("Username cannot be empty!");
+            errors.add("Username cannot be empty!");
         }
 
         if (!StringUtils.isEmpty(userEditBindingModel.getPassword())
@@ -158,30 +158,30 @@ public class AdminUserController {
 
                 principal.setPassword(bCryptPasswordEncoder.encode(userEditBindingModel.getPassword()));
             } else {
-                error.add("The passwords don't match!");
+                errors.add("The passwords don't match!");
             }
         }
 
-        error.addAll(emailInUseOrUsernameTaken(
+        errors.addAll(emailInUseOrUsernameTaken(
                 userEditBindingModel.getUsername(),
                 userEditBindingModel.getEmail(),
                 principal));
 
-        return error;
+        return errors;
     }
 
     private List<String> emailInUseOrUsernameTaken(String username, String email, User principal) {
-        List<String> error = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
         List<User> users = userRepository.findAll();
         for (User user : users) {
             if (!principal.getEmail().equals(user.getEmail()) && user.getUsername().equals(username)) {
-                error.add("This username is already taken!");
+                errors.add("This username is already taken!");
             }
 
             if (!principal.getUsername().equals(user.getUsername()) && user.getEmail().equals(email)) {
-                error.add("This email is already in use by other user!");
+                errors.add("This email is already in use by other user!");
             }
         }
-        return error;
+        return errors;
     }
 }

@@ -54,9 +54,9 @@ public class AnswerController {
                                 RedirectAttributes redirectAttributes){
 
         if(answerBindingModel.getContent().equals("")){
-            List<String> error = new ArrayList<>();
-            error.add("Please enter a valid content!");
-            redirectAttributes.addFlashAttribute("error", error);
+            List<String> errors = new ArrayList<>();
+            errors.add("Please enter a valid content!");
+            redirectAttributes.addFlashAttribute("errors", errors);
             return "redirect:/question/"+qId+"/answer/create/";
         }
 
@@ -115,9 +115,9 @@ public class AnswerController {
         }
 
         if(answerBindingModel.getContent().equals("")){
-            List<String> error = new ArrayList<>();
-            error.add("Please enter a valid new content!");
-            redirectAttributes.addFlashAttribute("error", error);
+            List<String> errors = new ArrayList<>();
+            errors.add("Please enter a valid new content!");
+            redirectAttributes.addFlashAttribute("errors", errors);
             return "redirect:/question/"+qId+"/answer/edit/"+id;
         }
 

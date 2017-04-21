@@ -61,13 +61,13 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     public String createProcess(QuestionBindingModel questionBindingModel,Model model){
 
-        List<String> error = validateQuestionFields(questionBindingModel);
-        if(!error.isEmpty()){
+        List<String> errors = validateQuestionFields(questionBindingModel);
+        if(!errors.isEmpty()){
 
             List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
             List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
 
-            model.addAttribute("error", error);
+            model.addAttribute("errors", errors);
             model.addAttribute("title", questionBindingModel.getTitle());
             model.addAttribute("content", questionBindingModel.getContent());
             model.addAttribute("categories", categories);
@@ -174,10 +174,10 @@ public class QuestionController {
             return "redirect:/";
         }
 
-        List<String> error = validateQuestionFields(questionBindingModel);
-        if(!error.isEmpty()){
+        List<String> errors = validateQuestionFields(questionBindingModel);
+        if(!errors.isEmpty()){
 
-            redirectAttributes.addFlashAttribute("error", error);
+            redirectAttributes.addFlashAttribute("errors", errors);
             return "redirect:/question/edit/"+id;
         }
 
@@ -272,21 +272,21 @@ public class QuestionController {
 
     private List<String> validateQuestionFields(QuestionBindingModel bindingModel)
     {
-        List<String> error = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
         if(bindingModel.getTitle().equals("")){
 
-            error.add("Please enter a valid title!");
+            errors.add("Please enter a valid title!");
             if(bindingModel.getContent().equals("")){
-                error.add("Please enter a valid content!");
+                errors.add("Please enter a valid content!");
             }
-            return error;
+            return errors;
         }
 
         if(bindingModel.getContent().equals("")){
 
-           error.add("Please enter a valid content!");
-           return error;
+           errors.add("Please enter a valid content!");
+           return errors;
         }
-        return error;
+        return errors;
     }
 }
