@@ -48,14 +48,24 @@ public class UserController {
     @PostMapping("/register")
     public String registerProcess(UserBindingModel userBindingModel, Model model){
 
-        List<String> error = validateUserFields(userBindingModel);
+        List<String> error = validateRegisterFields(userBindingModel);
         if (!error.isEmpty()){
+
            model.addAttribute("error", error);
            model.addAttribute("username", userBindingModel.getUsername());
            model.addAttribute("email", userBindingModel.getEmail());
            model.addAttribute("fullName", userBindingModel.getFullName());
            model.addAttribute("view", "user/register");
            return "base-layout";
+        }
+
+        if(isEmailInUseOrUsernameTaken(userBindingModel,error)){
+            model.addAttribute("error", error);
+            model.addAttribute("username", userBindingModel.getUsername());
+            model.addAttribute("email", userBindingModel.getEmail());
+            model.addAttribute("fullName", userBindingModel.getFullName());
+            model.addAttribute("view", "user/register");
+            return "base-layout";
         }
 
        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -124,34 +134,30 @@ public class UserController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editProfileProcess(UserEditBindingModel userBindingModel) {
+    public String editProfileProcess(@PathVariable Integer id,
+                                     UserEditBindingModel userBindingModel,
+                                     RedirectAttributes redirectAttributes) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
 
         User user = this.userRepository.findByUsername(principal.getUsername());
 
-        if (!StringUtils.isEmpty(userBindingModel.getPassword())
-                && !StringUtils.isEmpty(userBindingModel.getConfirmPassword())) {
 
-            if (userBindingModel.getPassword().equals((userBindingModel.getConfirmPassword()))) {
-                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        List<String> error = new ArrayList<>();
 
-                user.setPassword(bCryptPasswordEncoder.encode(userBindingModel.getPassword()));
-            }
-        }
-
-        String databaseImagePath = null;
+        String databaseImagePath = "/images/default.png";
 
         String[] allowedContentTypes = {
                 "image/png",
                 "image/jpeg",
-                "image/jpg"
+                "image/jpg",
+                "image/gif"
         };
 
         boolean isContentTypeAllowed = Arrays.asList(allowedContentTypes).contains(userBindingModel.getImage().getContentType());
 
-        if (isContentTypeAllowed) {
+        if (!userBindingModel.getImage().getOriginalFilename().equals("")&&isContentTypeAllowed) {
             String imagePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\";
             String filename = userBindingModel.getImage().getOriginalFilename();
             String savePath = imagePath + filename;
@@ -160,8 +166,16 @@ public class UserController {
                 userBindingModel.getImage().transferTo(imageFile);
                 databaseImagePath = "/images/" + filename;
             } catch (IOException e) {
-                System.out.println(e.getMessage());
+                error.add(e.getMessage());
             }
+        }else if(!userBindingModel.getImage().getOriginalFilename().equals("")&&!isContentTypeAllowed){
+            error.add("The file you tried to upload is not an image!");
+        }
+
+        error.addAll(validateUserEdit(userBindingModel,user));
+        if(!error.isEmpty()){
+            redirectAttributes.addFlashAttribute("error", error);
+            return "redirect:/edit/"+id;
         }
 
         user.setFullName(userBindingModel.getFullName());
@@ -170,70 +184,89 @@ public class UserController {
 
         this.userRepository.saveAndFlush(user);
 
-        return "redirect:/";
+        return "redirect:/profile";
     }
 
-    private List<String> validateUserFields(UserBindingModel bindingModel)
+    private List<String> validateUserEdit(UserBindingModel userBindingModel,User principal){
+        List<String> error = new ArrayList<>();
+
+        if (!StringUtils.isEmpty(userBindingModel.getPassword())
+                && !StringUtils.isEmpty(userBindingModel.getConfirmPassword())) {
+
+            if (userBindingModel.getPassword().equals((userBindingModel.getConfirmPassword()))) {
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+                principal.setPassword(bCryptPasswordEncoder.encode(userBindingModel.getPassword()));
+            }else {
+                error.add("Passwords don't match!");
+            }
+        }
+        if(userBindingModel.getFullName().equals("")){
+            error.add("Please enter a valid full name!");
+        }
+
+        if(userBindingModel.getEmail().equals("")){
+            error.add("Please enter a valid email!");
+        }
+
+        if(isEmailTaken(userBindingModel.getEmail(),principal)){
+            error.add("This email is already in use by other user!");
+
+        }
+
+        return error;
+    }
+
+    private boolean isEmailTaken(String email, User principal){
+        List<User> users = userRepository.findAll();
+        for(User user :users){
+            if(!principal.getUsername().equals(user.getUsername()) && user.getEmail().equals(email)){
+                return true;
+            }
+        }
+        return false;
+    }
+    private List<String> validateRegisterFields(UserBindingModel bindingModel)
     {
         List<String> error = new ArrayList<>();
-        if(bindingModel.getUsername().equals("")){
 
+        if(bindingModel.getUsername().equals("")){
             error.add("Please enter a valid username!");
-            if(bindingModel.getEmail().equals("")){
-                error.add("Please enter a valid email!");
-            }
-            if(bindingModel.getFullName().equals("")){
-                error.add("Please enter your full name!");
-            }
-            if(bindingModel.getPassword().equals("")){
-                error.add("Please enter a password and confirm it!");
-            }
-            return error;
         }
 
         if(bindingModel.getEmail().equals("")){
-
             error.add("Please enter a valid email!");
-
-            if(bindingModel.getFullName().equals("")){
-                error.add("Please enter your full name!");
-            }
-            if(bindingModel.getPassword().equals("")){
-                error.add("Please enter a password and confirm it!");
-            }
-            return error;
         }
 
         if(bindingModel.getFullName().equals("")){
-
             error.add("Please enter your full name!");
-            if(bindingModel.getPassword().equals("")){
-                error.add("Please enter a password and confirm it!");
-            }
-            return error;
-        }
-
-        if (!bindingModel.getPassword().equals(bindingModel.getConfirmPassword())){
-            error.add("Passwords don't match!");
-            return error;
         }
 
         if(bindingModel.getPassword().equals("")||bindingModel.getConfirmPassword().equals("")){
             error.add("Please enter a password and confirm it!");
-            return error;
         }
 
+        if (!bindingModel.getPassword().equals(bindingModel.getConfirmPassword())){
+            error.add("Passwords don't match!");
+        }
+
+        return error;
+    }
+
+    private boolean isEmailInUseOrUsernameTaken(UserBindingModel bindingModel,List<String> error){
         List<User> users = userRepository.findAll();
         for (User user:users) {
             if (user.getUsername().equals(bindingModel.getUsername())){
                 error.add("This username is already taken!");
+                return true;
             }
             if(user.getEmail().equals(bindingModel.getEmail())){
-                error.add("This email is already in use!");
+                error.add("This email is already in use by other user!");
+                return true;
             }
         }
 
-        return error;
+        return false;
     }
 
 }

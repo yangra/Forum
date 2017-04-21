@@ -45,3 +45,8 @@ span.categories.badge{
 #tagSection {
     margin-top: 0;
 }
+
+ul.error{
+    color: red;
+    list-style-position: inside;
+}
