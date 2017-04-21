@@ -59,14 +59,6 @@ public class UserController {
            return "base-layout";
         }
 
-        if(isEmailInUseOrUsernameTaken(userBindingModel,error)){
-            model.addAttribute("error", error);
-            model.addAttribute("username", userBindingModel.getUsername());
-            model.addAttribute("email", userBindingModel.getEmail());
-            model.addAttribute("fullName", userBindingModel.getFullName());
-            model.addAttribute("view", "user/register");
-            return "base-layout";
-        }
 
        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -226,6 +218,7 @@ public class UserController {
         }
         return false;
     }
+
     private List<String> validateRegisterFields(UserBindingModel bindingModel)
     {
         List<String> error = new ArrayList<>();
@@ -250,23 +243,16 @@ public class UserController {
             error.add("Passwords don't match!");
         }
 
+        if(userRepository.findByEmail(bindingModel.getEmail())!=null){
+            error.add("This email is already in use by other user!");
+        }
+
+        if(userRepository.findByUsername(bindingModel.getUsername())!=null){
+            error.add("This username is already taken!");
+        }
+
         return error;
     }
 
-    private boolean isEmailInUseOrUsernameTaken(UserBindingModel bindingModel,List<String> error){
-        List<User> users = userRepository.findAll();
-        for (User user:users) {
-            if (user.getUsername().equals(bindingModel.getUsername())){
-                error.add("This username is already taken!");
-                return true;
-            }
-            if(user.getEmail().equals(bindingModel.getEmail())){
-                error.add("This email is already in use by other user!");
-                return true;
-            }
-        }
-
-        return false;
-    }
 
 }

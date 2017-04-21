@@ -4,25 +4,30 @@
             <form class="form-horizontal" th:action="@{/admin/users/edit/{id}(id=${user.id})}" method="post">
                 <fieldset>
                     <legend>Edit User</legend>
+
+                    <ul class="error col-sm-offset-4">
+                        <li th:if="${error}" th:each="err:${error}" th:text="${err}" ></li>
+                    </ul>
+
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="user_email">Email</label>
                         <div class="col-sm-4 ">
                             <input class="form-control" type="email" id="user_email" placeholder="Email" name="email"
-                                   required="required" th:value="${user.email}"/>
+                                    th:value="${user.email}"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="user_username">Username</label>
                         <div class="col-sm-4 ">
                             <input class="form-control" type="text" id="user_username" placeholder="Username"
-                                   name="username" required="required" th:value="${user.username}"/>
+                                   name="username"  th:value="${user.username}"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="user_fullname">Full Name</label>
                         <div class="col-sm-4 ">
                             <input class="form-control" type="text" id="user_fullname" placeholder="Full Name"
-                                   name="fullName" required="required" th:value="${user.fullName}"/>
+                                   name="fullName"  th:value="${user.fullName}"/>
                         </div>
                     </div>
                     <div class="form-group">

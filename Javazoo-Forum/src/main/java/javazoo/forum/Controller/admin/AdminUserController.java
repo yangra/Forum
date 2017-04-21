@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,7 +53,7 @@ public class AdminUserController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
-        if (!this.userRepository.exists(id)){
+        if (!this.userRepository.exists(id)) {
             return "redirect:/admin/users/";
         }
 
@@ -66,29 +68,28 @@ public class AdminUserController {
     }
 
     @PostMapping("/edit/{id}")
-    public String editProcess(@PathVariable Integer id, UserEditBindingModel userBindingModel) {
+    public String editProcess(@PathVariable Integer id,
+                              UserEditBindingModel userEditBindingModel,
+                              RedirectAttributes redirectAttributes) {
         if (!this.userRepository.exists(id)) {
             return "redirect:/admin/users/";
         }
 
         User user = this.userRepository.findOne(id);
 
-        if (!StringUtils.isEmpty(userBindingModel.getPassword())
-                && !StringUtils.isEmpty(userBindingModel.getConfirmPassword())) {
+        List<String> error = validateAdminUserEdit(userEditBindingModel, user);
 
-            if (userBindingModel.getPassword().equals((userBindingModel.getConfirmPassword()))) {
-                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
-                user.setPassword(bCryptPasswordEncoder.encode(userBindingModel.getPassword()));
-            }
+        if (!error.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", error);
+            return "redirect:/admin/users/edit/" + id;
         }
 
-        user.setFullName(userBindingModel.getFullName());
-        user.setEmail(userBindingModel.getEmail());
+        user.setFullName(userEditBindingModel.getFullName());
+        user.setEmail(userEditBindingModel.getEmail());
 
         Set<Role> roles = new HashSet<>();
 
-        for (Integer roleId : userBindingModel.getRoles()) {
+        for (Integer roleId : userEditBindingModel.getRoles()) {
             roles.add(this.roleRepository.findOne(roleId));
         }
 
@@ -101,7 +102,7 @@ public class AdminUserController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Integer id, Model model) {
-        if (!this.userRepository.exists(id)){
+        if (!this.userRepository.exists(id)) {
             return "redirect:/admin/users/";
         }
 
@@ -131,6 +132,56 @@ public class AdminUserController {
 
         this.userRepository.delete(user);
 
-        return  "redirect:/admin/users/";
+        return "redirect:/admin/users/";
+    }
+
+    private List<String> validateAdminUserEdit(UserEditBindingModel userEditBindingModel, User principal) {
+
+        List<String> error = new ArrayList<>();
+        if (userEditBindingModel.getFullName().equals("")) {
+            error.add("Full name cannot be empty!");
+        }
+
+        if (userEditBindingModel.getEmail().equals("")) {
+            error.add("Email cannot be empty!");
+        }
+
+        if (userEditBindingModel.getUsername().equals("")) {
+            error.add("Username cannot be empty!");
+        }
+
+        if (!StringUtils.isEmpty(userEditBindingModel.getPassword())
+                && !StringUtils.isEmpty(userEditBindingModel.getConfirmPassword())) {
+
+            if (userEditBindingModel.getPassword().equals((userEditBindingModel.getConfirmPassword()))) {
+                BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+                principal.setPassword(bCryptPasswordEncoder.encode(userEditBindingModel.getPassword()));
+            } else {
+                error.add("The passwords don't match!");
+            }
+        }
+
+        error.addAll(emailInUseOrUsernameTaken(
+                userEditBindingModel.getUsername(),
+                userEditBindingModel.getEmail(),
+                principal));
+
+        return error;
+    }
+
+    private List<String> emailInUseOrUsernameTaken(String username, String email, User principal) {
+        List<String> error = new ArrayList<>();
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            if (!principal.getEmail().equals(user.getEmail()) && user.getUsername().equals(username)) {
+                error.add("This username is already taken!");
+            }
+
+            if (!principal.getUsername().equals(user.getUsername()) && user.getEmail().equals(email)) {
+                error.add("This email is already in use by other user!");
+            }
+        }
+        return error;
     }
 }
