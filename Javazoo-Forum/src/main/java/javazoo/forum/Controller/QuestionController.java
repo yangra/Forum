@@ -13,8 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,12 +61,14 @@ public class QuestionController {
     @PreAuthorize("isAuthenticated()")
     public String createProcess(QuestionBindingModel questionBindingModel,Model model){
 
-        if(questionBindingModel.getTitle().equals("")){
+        List<String> error = validateQuestionFields(questionBindingModel);
+        if(!error.isEmpty()){
 
             List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
             List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
-            String error = "Please enter a valid title";
+
             model.addAttribute("error", error);
+            model.addAttribute("title", questionBindingModel.getTitle());
             model.addAttribute("content", questionBindingModel.getContent());
             model.addAttribute("categories", categories);
             model.addAttribute("subcategories", subcategories);
@@ -72,18 +76,7 @@ public class QuestionController {
             return "base-layout";
         }
 
-        if(questionBindingModel.getContent().equals("")){
 
-            List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
-            List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
-            String error = "Please enter a valid content";
-            model.addAttribute("error", error);
-            model.addAttribute("title", questionBindingModel.getTitle());
-            model.addAttribute("categories", categories);
-            model.addAttribute("subcategories", subcategories);
-            model.addAttribute("view", "/question/create");
-            return "base-layout";
-        }
 
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
@@ -176,9 +169,16 @@ public class QuestionController {
 
     @PostMapping("question/edit/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String editProcess(@PathVariable Integer id, QuestionBindingModel questionBindingModel){
+    public String editProcess(@PathVariable Integer id, QuestionBindingModel questionBindingModel, RedirectAttributes redirectAttributes){
         if (!this.questionRepository.exists(id)){
             return "redirect:/";
+        }
+
+        List<String> error = validateQuestionFields(questionBindingModel);
+        if(!error.isEmpty()){
+
+            redirectAttributes.addFlashAttribute("error", error);
+            return "redirect:/question/edit/"+id;
         }
 
         Question question = this.questionRepository.findOne(id);
@@ -268,5 +268,25 @@ public class QuestionController {
             tags.add(currentTag);
         }
         return tags;
+    }
+
+    private List<String> validateQuestionFields(QuestionBindingModel bindingModel)
+    {
+        List<String> error = new ArrayList<>();
+        if(bindingModel.getTitle().equals("")){
+
+            error.add("Please enter a valid title!");
+            if(bindingModel.getContent().equals("")){
+                error.add("Please enter a valid content!");
+            }
+            return error;
+        }
+
+        if(bindingModel.getContent().equals("")){
+
+           error.add("Please enter a valid content!");
+           return error;
+        }
+        return error;
     }
 }
