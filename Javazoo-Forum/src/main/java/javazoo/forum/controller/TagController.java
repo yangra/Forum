@@ -1,4 +1,4 @@
-package javazoo.forum.Controller;
+package javazoo.forum.controller;
 
 import javazoo.forum.entity.Category;
 import javazoo.forum.entity.Question;
