@@ -4,34 +4,39 @@
             <form class="form-horizontal" th:action="@{/register}" method="post">
                 <fieldset>
                     <legend>Register</legend>
+
+                    <ul class="error col-sm-offset-4">
+                        <li th:if="${error}" th:each="err:${error}" th:text="${err}" ></li>
+                    </ul>
+
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="user_username">Username</label>
                         <div class="col-sm-4 ">
-                            <input class="form-control" type="text" id="user_username" placeholder="Username" name="username" required="required"/>
+                            <input class="form-control" type="text" id="user_username" placeholder="Username" th:value="${username}" name="username"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="user_email">Email</label>
                         <div class="col-sm-4 ">
-                            <input class="form-control" type="email" id="user_email" placeholder="Email" name="email" required="required"/>
+                            <input class="form-control" type="email" id="user_email" placeholder="Email" th:value="${email}" name="email"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="user_fullname">Full Name</label>
                         <div class="col-sm-4 ">
-                            <input class="form-control" type="text" id="user_fullname" placeholder="Full Name" name="fullName" required="required"/>
+                            <input class="form-control" type="text" id="user_fullname" placeholder="Full Name" th:value="${fullName}" name="fullName"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="user_password_first">Password</label>
                         <div class="col-sm-4">
-                            <input type="password" class="form-control" id="user_password_first" placeholder="Password" name="password" required="required"/>
+                            <input type="password" class="form-control" id="user_password_first" placeholder="Password" name="password"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="user_password_second">Confirm Password</label>
                         <div class="col-sm-4">
-                            <input type="password" class="form-control" id="user_password_second" placeholder="Password" name="confirmPassword" required="required"/>
+                            <input type="password" class="form-control" id="user_password_second" placeholder="Password" name="confirmPassword"/>
                         </div>
                     </div>
                     <div class="form-group">

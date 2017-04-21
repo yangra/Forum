@@ -1,4 +1,4 @@
-package javazoo.forum.Controller;
+package javazoo.forum.controller;
 
 import javazoo.forum.bindingModel.UserBindingModel;
 import javazoo.forum.bindingModel.UserEditBindingModel;
@@ -17,13 +17,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Controller
 @Transactional
@@ -43,10 +46,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerProcess(UserBindingModel userBindingModel){
-       if (!userBindingModel.getPassword().equals(userBindingModel.getConfirmPassword())){
-           return "redirect: /register";
-       }
+    public String registerProcess(UserBindingModel userBindingModel, Model model){
+
+        List<String> error = validateUserFields(userBindingModel);
+        if (!error.isEmpty()){
+           model.addAttribute("error", error);
+           model.addAttribute("username", userBindingModel.getUsername());
+           model.addAttribute("email", userBindingModel.getEmail());
+           model.addAttribute("fullName", userBindingModel.getFullName());
+           model.addAttribute("view", "user/register");
+           return "base-layout";
+        }
 
        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -161,6 +171,69 @@ public class UserController {
         this.userRepository.saveAndFlush(user);
 
         return "redirect:/";
+    }
+
+    private List<String> validateUserFields(UserBindingModel bindingModel)
+    {
+        List<String> error = new ArrayList<>();
+        if(bindingModel.getUsername().equals("")){
+
+            error.add("Please enter a valid username!");
+            if(bindingModel.getEmail().equals("")){
+                error.add("Please enter a valid email!");
+            }
+            if(bindingModel.getFullName().equals("")){
+                error.add("Please enter your full name!");
+            }
+            if(bindingModel.getPassword().equals("")){
+                error.add("Please enter a password and confirm it!");
+            }
+            return error;
+        }
+
+        if(bindingModel.getEmail().equals("")){
+
+            error.add("Please enter a valid email!");
+
+            if(bindingModel.getFullName().equals("")){
+                error.add("Please enter your full name!");
+            }
+            if(bindingModel.getPassword().equals("")){
+                error.add("Please enter a password and confirm it!");
+            }
+            return error;
+        }
+
+        if(bindingModel.getFullName().equals("")){
+
+            error.add("Please enter your full name!");
+            if(bindingModel.getPassword().equals("")){
+                error.add("Please enter a password and confirm it!");
+            }
+            return error;
+        }
+
+        if (!bindingModel.getPassword().equals(bindingModel.getConfirmPassword())){
+            error.add("Passwords don't match!");
+            return error;
+        }
+
+        if(bindingModel.getPassword().equals("")||bindingModel.getConfirmPassword().equals("")){
+            error.add("Please enter a password and confirm it!");
+            return error;
+        }
+
+        List<User> users = userRepository.findAll();
+        for (User user:users) {
+            if (user.getUsername().equals(bindingModel.getUsername())){
+                error.add("This username is already taken!");
+            }
+            if(user.getEmail().equals(bindingModel.getEmail())){
+                error.add("This email is already in use!");
+            }
+        }
+
+        return error;
     }
 
 }
