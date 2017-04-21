@@ -72,7 +72,7 @@
                             <div class="pull-right">
                                 <th:block sec:authorize="isAuthenticated()"
                                           th:if="${user.isAdmin() OR user.isAuthor(answer)}">
-                                    <a class="btn btn-success btn-xs"
+                                    <a class="btn btn-default"
                                        th:href="@{/question/{qId}/answer/edit/{id}(id = ${answer.id}, qId = ${question.id})}">Edit</a>
                                     <a class="btn btn-danger btn-xs"
                                        th:href="@{/question/{qId}/answer/delete/{id}(id = ${answer.id}, qId = ${question.id})}">Delete</a>

@@ -42,8 +42,3 @@ span.categories.badge{
     display: inline-block;
     width: 30px;
 }
-
-ul.error{
-    color: red;
-    list-style-position: inside;
-}

@@ -15,12 +15,12 @@
                 </div>
             </div>
         </aside>
-        <!--<section class="col-sm-9">-->
-            <!--<h1>Search by Tag - <th:block th:text="${tag.name}"></th:block></h1>-->
-        <!--</section>-->
 
 
-        <section class="col-md-9 container body-content">
+        <section class="col-md-9 container body-content" id="tagSection">
+
+            <h2 class="col-sm-offset-2">Search by Tag - <th:block th:text="${tag.name}"></th:block></h2>
+
             <div class="row">
                 <th:block th:each="question : ${tag.questions}">
                     <div class="col-md-9 col-md-offset-2">
