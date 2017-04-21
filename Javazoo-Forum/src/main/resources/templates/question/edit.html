@@ -5,6 +5,10 @@
                 <fieldset>
                     <legend>Edit Question</legend>
 
+                    <ul class="error col-sm-offset-4">
+                        <li th:if="${error}" th:each="err:${error}" th:text="${err}" ></li>
+                    </ul>
+
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="question_title">Question Title</label>
                         <div class="col-sm-4 ">
@@ -45,7 +49,7 @@
                         <label class="col-sm-4 control-label" for="question_tags">Tags</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="question_tags"
-                                   placeholder="Tags" name="tagString" th:value="${tags}"/>
+                                   placeholder="tag1, tag2" name="tagString" th:value="${tags}"/>
                         </div>
                     </div>
 

@@ -17,9 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @Transactional
@@ -46,7 +49,16 @@ public class AnswerController {
 
     @PostMapping("question/{qId}/answer/create")
     @PreAuthorize("isAuthenticated()")
-    public String createProcess(AnswerBindingModel answerBindingModel, @PathVariable Integer qId){
+    public String createProcess(AnswerBindingModel answerBindingModel,
+                                @PathVariable Integer qId,
+                                RedirectAttributes redirectAttributes){
+
+        if(answerBindingModel.getContent().equals("")){
+            List<String> error = new ArrayList<>();
+            error.add("Please enter a valid content!");
+            redirectAttributes.addFlashAttribute("error", error);
+            return "redirect:/question/"+qId+"/answer/create/";
+        }
 
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
@@ -86,15 +98,27 @@ public class AnswerController {
 
     @PostMapping("question/{qId}/answer/edit/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String editProcess(@PathVariable Integer id, @PathVariable Integer qId, AnswerBindingModel answerBindingModel){
+    public String editProcess(@PathVariable Integer id,
+                              @PathVariable Integer qId,
+                              AnswerBindingModel answerBindingModel,
+                              RedirectAttributes redirectAttributes){
+
         if (!this.answersRepository.exists(id)){
             return "redirect:/question/{qId}";
         }
+
 
         Answer answer = this.answersRepository.findOne(id);
 
         if(!isUserAuthorOrAdmin(answer)){
             return "redirect:/question/"+qId;
+        }
+
+        if(answerBindingModel.getContent().equals("")){
+            List<String> error = new ArrayList<>();
+            error.add("Please enter a valid new content!");
+            redirectAttributes.addFlashAttribute("error", error);
+            return "redirect:/question/"+qId+"/answer/edit/"+id;
         }
 
         answer.setContent(answerBindingModel.getContent());
