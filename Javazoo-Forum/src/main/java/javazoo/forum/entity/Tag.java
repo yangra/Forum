@@ -15,7 +15,9 @@ public class Tag {
     private Set<Question> questions;
 
 
-    public Tag(){}
+    public Tag(){
+        this.questions = new HashSet<>();
+    }
 
     public Tag(String name){
         this.name = name;

@@ -38,7 +38,9 @@ public class User {
     }
 
     public User(){
-
+        this.roles = new HashSet<>();
+        this.questions = new HashSet<>();
+        this.answers = new HashSet<>();
     }
 
     @Id

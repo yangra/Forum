@@ -70,13 +70,12 @@ public class AdminCategoryController {
     public String createProcess(CategoryBindingModel categoryBindingModel, RedirectAttributes redirectAttributes) {
 
         List<String> errors = validateCategoryName(categoryBindingModel);
-
         if(!errors.isEmpty()){
             redirectAttributes.addFlashAttribute("errors", errors);
             return "redirect:/admin/categories/create";
         }
-
-        Category category = new Category(categoryBindingModel.getName());
+        List<Category> categories = categoryRepository.findAll();
+        Category category = new Category(categoryBindingModel.getName(), categories.size()+1);
 
         this.categoryRepository.saveAndFlush(category);
 

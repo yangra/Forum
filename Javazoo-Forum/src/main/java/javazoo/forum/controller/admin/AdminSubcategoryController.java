@@ -80,7 +80,8 @@ public class AdminSubcategoryController {
             return "redirect:/admin/subcategories/create";
         }
 
-        Subcategory subcategory = new Subcategory(subcategoryBindingModel.getName(), category);
+        List<Subcategory> subcategories = subcategoryRepository.findByCategory(category);
+        Subcategory subcategory = new Subcategory(subcategoryBindingModel.getName(), category, subcategories.size()+1);
 
         this.subcategoryRepository.saveAndFlush(subcategory);
 
