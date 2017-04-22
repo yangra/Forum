@@ -74,7 +74,7 @@ public class AdminCategoryController {
             redirectAttributes.addFlashAttribute("errors", errors);
             return "redirect:/admin/categories/create";
         }
-        List<Category> categories = categoryRepository.findAll();
+        List<Category> categories = this.categoryRepository.findAll();
         Category category = new Category(categoryBindingModel.getName(), categories.size()+1);
 
         this.categoryRepository.saveAndFlush(category);
@@ -162,7 +162,7 @@ public class AdminCategoryController {
             errors.add("Category name cannot be empty!");
         }
 
-        if (categoryRepository.findByName(categoryBindingModel.getName()) != null) {
+        if (this.categoryRepository.findByName(categoryBindingModel.getName()) != null) {
             errors.add("Category with this name already exists!");
         }
 

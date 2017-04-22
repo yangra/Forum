@@ -80,7 +80,7 @@ public class AdminSubcategoryController {
             return "redirect:/admin/subcategories/create";
         }
 
-        List<Subcategory> subcategories = subcategoryRepository.findByCategory(category);
+        List<Subcategory> subcategories = this.subcategoryRepository.findByCategory(category);
         Subcategory subcategory = new Subcategory(subcategoryBindingModel.getName(), category, subcategories.size()+1);
 
         this.subcategoryRepository.saveAndFlush(subcategory);
@@ -169,7 +169,7 @@ public class AdminSubcategoryController {
             errors.add("Subcategory name cannot be empty!");
         }
 
-        List<Subcategory> subcategories = subcategoryRepository.findByCategory(category);
+        List<Subcategory> subcategories = this.subcategoryRepository.findByCategory(category);
         for(Subcategory subcategory:subcategories){
             if(subcategory.getName().equals(subcategoryBindingModel.getName())){
                 errors.add("Subcategory with this name already exists under this category!");

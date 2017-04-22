@@ -172,7 +172,7 @@ public class AdminUserController {
 
     private List<String> emailInUseOrUsernameTaken(String username, String email, User principal) {
         List<String> errors = new ArrayList<>();
-        List<User> users = userRepository.findAll();
+        List<User> users = this.userRepository.findAll();
         for (User user : users) {
             if (!principal.getEmail().equals(user.getEmail()) && user.getUsername().equals(username)) {
                 errors.add("This username is already taken!");

@@ -168,9 +168,6 @@ public class AnswerController {
 
     }
 
-
-
-
     private boolean isUserAuthorOrAdmin(Answer answer) {
         UserDetails user = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();

@@ -32,7 +32,7 @@ public class CategoryController {
 
 
     @GetMapping("categories/{id}")
-    public String openCategory(@PathVariable Integer id, Model model){
+    public String openCategory(@PathVariable Integer id, Model model) {
 
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
         List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
@@ -48,7 +48,7 @@ public class CategoryController {
     }
 
     @GetMapping("categories/{categoryId}/{subcategoryId}")
-    public String openSubCategory(@PathVariable Integer categoryId, @PathVariable Integer subcategoryId, Model model){
+    public String openSubCategory(@PathVariable Integer categoryId, @PathVariable Integer subcategoryId, Model model) {
 
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
         List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
@@ -64,13 +64,13 @@ public class CategoryController {
         return "base-layout";
     }
 
-    @RequestMapping(value = "/subcategories" )
+    @RequestMapping(value = "/subcategories")
     @ResponseBody
     public List getSubcategories(@RequestParam Integer catId) {
         List<SubcategoryViewModel> subcategories = new ArrayList<>();
         Category category = this.categoryRepository.findOne(catId);
         List<Subcategory> subs = this.subcategoryRepository.findByCategory(category);
-        for(int i = 0; i<subs.size();i++){
+        for (int i = 0; i < subs.size(); i++) {
             SubcategoryViewModel sub = new SubcategoryViewModel();
             sub.setId(subs.get(i).getId());
             sub.setName(subs.get(i).getName());

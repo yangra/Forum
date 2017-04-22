@@ -39,61 +39,61 @@ public class UserController {
     UserRepository userRepository;
 
     @GetMapping("/register")
-    public String register(Model model){
+    public String register(Model model) {
         model.addAttribute("view", "user/register");
 
         return "base-layout";
     }
 
     @PostMapping("/register")
-    public String registerProcess(UserBindingModel userBindingModel, Model model){
+    public String registerProcess(UserBindingModel userBindingModel, Model model) {
 
         List<String> errors = validateRegisterFields(userBindingModel);
-        if (!errors.isEmpty()){
+        if (!errors.isEmpty()) {
 
-           model.addAttribute("errors", errors);
-           model.addAttribute("username", userBindingModel.getUsername());
-           model.addAttribute("email", userBindingModel.getEmail());
-           model.addAttribute("fullName", userBindingModel.getFullName());
-           model.addAttribute("view", "user/register");
-           return "base-layout";
+            model.addAttribute("errors", errors);
+            model.addAttribute("username", userBindingModel.getUsername());
+            model.addAttribute("email", userBindingModel.getEmail());
+            model.addAttribute("fullName", userBindingModel.getFullName());
+            model.addAttribute("view", "user/register");
+            return "base-layout";
         }
 
 
-       BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
-       String databaseImagePath ="/images/default.png";
+        String databaseImagePath = "/images/default.png";
 
-       User user = new User(
-               userBindingModel.getUsername(),
-               userBindingModel.getEmail(),
-               userBindingModel.getFullName(),
-               bCryptPasswordEncoder.encode(userBindingModel.getPassword()),
-               databaseImagePath
-       );
+        User user = new User(
+                userBindingModel.getUsername(),
+                userBindingModel.getEmail(),
+                userBindingModel.getFullName(),
+                bCryptPasswordEncoder.encode(userBindingModel.getPassword()),
+                databaseImagePath
+        );
 
-       Role userRole = this.roleRepository.findByName("ROLE_USER");
+        Role userRole = this.roleRepository.findByName("ROLE_USER");
 
-       user.addRole(userRole);
+        user.addRole(userRole);
 
-       this.userRepository.saveAndFlush(user);
+        this.userRepository.saveAndFlush(user);
 
-       return "redirect:/login";
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
-    public String login(Model model){
+    public String login(Model model) {
         model.addAttribute("view", "user/login");
 
         return "base-layout";
     }
 
-    @RequestMapping(value="/logout", method = RequestMethod.GET)
-    public String logoutPage(HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if(auth != null){
-            new SecurityContextLogoutHandler().logout(request,response, auth);
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
         }
 
         return "redirect:login?logout";
@@ -101,10 +101,10 @@ public class UserController {
 
     @GetMapping("/profile")
     @PreAuthorize("isAuthenticated()")
-    public String profilePage(Model model){
+    public String profilePage(Model model) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext()
-                                                                    .getAuthentication()
-                                                                    .getPrincipal();
+                .getAuthentication()
+                .getPrincipal();
 
         User user = this.userRepository.findByUsername(principal.getUsername());
 
@@ -149,7 +149,7 @@ public class UserController {
 
         boolean isContentTypeAllowed = Arrays.asList(allowedContentTypes).contains(userBindingModel.getImage().getContentType());
 
-        if (!userBindingModel.getImage().getOriginalFilename().equals("")&&isContentTypeAllowed) {
+        if (!userBindingModel.getImage().getOriginalFilename().equals("") && isContentTypeAllowed) {
             String imagePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\";
             String filename = userBindingModel.getImage().getOriginalFilename();
             String savePath = imagePath + filename;
@@ -160,14 +160,14 @@ public class UserController {
             } catch (IOException e) {
                 errors.add(e.getMessage());
             }
-        }else if(!userBindingModel.getImage().getOriginalFilename().equals("")&&!isContentTypeAllowed){
+        } else if (!userBindingModel.getImage().getOriginalFilename().equals("") && !isContentTypeAllowed) {
             errors.add("The file you tried to upload is not an image!");
         }
 
-        errors.addAll(validateUserEdit(userBindingModel,user));
-        if(!errors.isEmpty()){
+        errors.addAll(validateUserEdit(userBindingModel, user));
+        if (!errors.isEmpty()) {
             redirectAttributes.addFlashAttribute("errors", errors);
-            return "redirect:/edit/"+id;
+            return "redirect:/edit/" + id;
         }
 
         user.setFullName(userBindingModel.getFullName());
@@ -179,7 +179,7 @@ public class UserController {
         return "redirect:/profile";
     }
 
-    private List<String> validateUserEdit(UserBindingModel userBindingModel,User principal){
+    private List<String> validateUserEdit(UserBindingModel userBindingModel, User principal) {
         List<String> errors = new ArrayList<>();
 
         if (!StringUtils.isEmpty(userBindingModel.getPassword())
@@ -189,19 +189,19 @@ public class UserController {
                 BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
                 principal.setPassword(bCryptPasswordEncoder.encode(userBindingModel.getPassword()));
-            }else {
+            } else {
                 errors.add("Passwords don't match!");
             }
         }
-        if(userBindingModel.getFullName().equals("")){
+        if (userBindingModel.getFullName().equals("")) {
             errors.add("Please enter a valid full name!");
         }
 
-        if(userBindingModel.getEmail().equals("")){
+        if (userBindingModel.getEmail().equals("")) {
             errors.add("Please enter a valid email!");
         }
 
-        if(isEmailTaken(userBindingModel.getEmail(),principal)){
+        if (isEmailTaken(userBindingModel.getEmail(), principal)) {
             errors.add("This email is already in use by other user!");
 
         }
@@ -209,45 +209,44 @@ public class UserController {
         return errors;
     }
 
-    private boolean isEmailTaken(String email, User principal){
-        List<User> users = userRepository.findAll();
-        for(User user :users){
-            if(!principal.getUsername().equals(user.getUsername()) && user.getEmail().equals(email)){
+    private boolean isEmailTaken(String email, User principal) {
+        List<User> users = this.userRepository.findAll();
+        for (User user : users) {
+            if (!principal.getUsername().equals(user.getUsername()) && user.getEmail().equals(email)) {
                 return true;
             }
         }
         return false;
     }
 
-    private List<String> validateRegisterFields(UserBindingModel bindingModel)
-    {
+    private List<String> validateRegisterFields(UserBindingModel bindingModel) {
         List<String> errors = new ArrayList<>();
 
-        if(bindingModel.getUsername().equals("")){
+        if (bindingModel.getUsername().equals("")) {
             errors.add("Please enter a valid username!");
         }
 
-        if(bindingModel.getEmail().equals("")){
+        if (bindingModel.getEmail().equals("")) {
             errors.add("Please enter a valid email!");
         }
 
-        if(bindingModel.getFullName().equals("")){
+        if (bindingModel.getFullName().equals("")) {
             errors.add("Please enter your full name!");
         }
 
-        if(bindingModel.getPassword().equals("")||bindingModel.getConfirmPassword().equals("")){
+        if (bindingModel.getPassword().equals("") || bindingModel.getConfirmPassword().equals("")) {
             errors.add("Please enter a password and confirm it!");
         }
 
-        if (!bindingModel.getPassword().equals(bindingModel.getConfirmPassword())){
+        if (!bindingModel.getPassword().equals(bindingModel.getConfirmPassword())) {
             errors.add("Passwords don't match!");
         }
 
-        if(userRepository.findByEmail(bindingModel.getEmail())!=null){
+        if (this.userRepository.findByEmail(bindingModel.getEmail()) != null) {
             errors.add("This email is already in use by other user!");
         }
 
-        if(userRepository.findByUsername(bindingModel.getUsername())!=null){
+        if (this.userRepository.findByUsername(bindingModel.getUsername()) != null) {
             errors.add("This username is already taken!");
         }
 
