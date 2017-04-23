@@ -1,7 +1,6 @@
 package javazoo.forum.controller;
 
 import javazoo.forum.entity.Category;
-import javazoo.forum.entity.Question;
 import javazoo.forum.entity.Tag;
 import javazoo.forum.repository.CategoryRepository;
 import javazoo.forum.repository.QuestionRepository;
@@ -26,7 +25,7 @@ public class TagController {
     private CategoryRepository categoryRepository;
 
     @GetMapping("/tag/{name}")
-    public String questionsWithTag(Model model, @PathVariable String name){
+    public String questionsWithTag( Model model, @PathVariable String name){
 
         Tag tag = this.tagRepository.findByName(name);
 
@@ -35,13 +34,10 @@ public class TagController {
         }
 
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
-       List<Question> questions = this.questionRepository.findAllByOrderByCreationDateDesc();
 
         model.addAttribute("view", "tag/questions");
         model.addAttribute("tag", tag);
         model.addAttribute("categories",categories );
-        model.addAttribute("questions", questions);
-
 
         return "base-layout";
     }
