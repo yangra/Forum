@@ -14,6 +14,7 @@ public class Question {
     private String title;
     private String content;
     private User author;
+    private Answer lastAnswer;
     private Date creationDate;
     private Set<Answer> answers;
     private Category category;
@@ -29,7 +30,7 @@ public class Question {
         this.answers = new HashSet<>();
         this.category = category;
         this.subcategory = subcategory;
-
+        this.lastAnswer= null;
         this.tags = tags;
     }
 
@@ -73,6 +74,16 @@ public class Question {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    @OneToOne()
+    @JoinColumn(name="lastAnswerId")
+    public Answer getLastAnswer() {
+        return lastAnswer;
+    }
+
+    public void setLastAnswer(Answer lastAnswer) {
+        this.lastAnswer = lastAnswer;
     }
 
     @Column

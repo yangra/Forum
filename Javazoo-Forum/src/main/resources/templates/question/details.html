@@ -37,8 +37,9 @@
                             </div>
 
                             <div class="col-md-5">
-                                <a href="#">
-                                    Category of the post
+                                <a th:href="@{/categories/{categoryId}/{subcategoryId}
+                                        (categoryId = ${question.category.id}, subcategoryId = ${question.subcategory.id})}">
+                                    <span th:text="${question.subcategory.name}"></span>
                                 </a>
                             </div>
                         </div>

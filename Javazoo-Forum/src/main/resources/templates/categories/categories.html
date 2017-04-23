@@ -16,21 +16,23 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="col-md-4">
-                                        <a href="#">
-                                            Category of the post
+                                        <a th:href="@{/categories/{categoryId}/{subcategoryId}
+                                        (categoryId = ${question.category.id}, subcategoryId = ${question.subcategory.id})}">
+                                            <span th:text="${question.subcategory.name}"></span>
                                         </a>
                                         <br/><br/>
-                                        Answers: 43
+                                        Answers:
+                                        <span th:text="${question.answers.size()}"></span>
                                     </div>
                                     <div class="col-md-4 ">
                                         Created by:<br/>
-                                        <span >AUTHOR</span><br/>
+                                        <span th:text="${question.author.username}"></span><br/>
                                         <span th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
                                     </div>
                                     <div class="col-md-4 ">
                                         Last activity:<br/>
-                                        author...<br/>
-                                        24/05/2016
+                                        <span th:text="${question.lastAnswer.author.username}"></span> <br/>
+                                        <span th:text="${#dates.format(question.lastAnswer.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
                                     </div>
                                 </div>
                             </div>

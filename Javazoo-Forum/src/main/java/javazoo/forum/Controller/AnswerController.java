@@ -72,7 +72,9 @@ public class AnswerController {
                 questionEntity
         );
 
+        questionEntity.setLastAnswer(answerEntity);
         this.answersRepository.saveAndFlush(answerEntity);
+        this.questionRepository.saveAndFlush(questionEntity);
 
         return "redirect:/question/{qId}";
     }
