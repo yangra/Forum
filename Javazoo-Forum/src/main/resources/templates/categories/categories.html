@@ -38,6 +38,7 @@
                     </div>
                 </th:block>
             </div>
+           <span th:include="${subcategoryId} ? 'pagination/subcategory' : 'pagination/category'"></span>
         </section>
     </div>
 </main>

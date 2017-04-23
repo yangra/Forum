@@ -3,6 +3,9 @@ package javazoo.forum.controller.admin;
 import javazoo.forum.bindingModel.UserEditBindingModel;
 import javazoo.forum.entity.Answer;
 import javazoo.forum.entity.Question;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.util.StringUtils;
 import javazoo.forum.entity.Role;
 import javazoo.forum.entity.User;
@@ -42,12 +45,12 @@ public class AdminUserController {
     private RoleRepository roleRepository;
 
     @GetMapping("/")
-    public String listUsers(Model model) {
-        List<User> users = this.userRepository.findAll();
+    public String listUsers(@PageableDefault(value = 20) Pageable pageable, Model model) {
+        Page<User> users = this.userRepository.findAll(pageable);
 
         model.addAttribute("users", users);
         model.addAttribute("view", "admin/user/list");
-
+        model.addAttribute("size", 20);
         return "base-layout";
     }
 

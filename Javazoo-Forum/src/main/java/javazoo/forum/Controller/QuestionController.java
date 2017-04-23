@@ -4,6 +4,9 @@ import javazoo.forum.bindingModel.QuestionBindingModel;
 import javazoo.forum.entity.*;
 import javazoo.forum.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -101,7 +104,7 @@ public class QuestionController {
     }
 
     @GetMapping("/question/{id}")
-    public String details(Model model, @PathVariable Integer id){
+    public String details(Model model, @PathVariable Integer id, @PageableDefault(value = 5) Pageable pageable){
         if (!this.questionRepository.exists(id)){
             return "redirect:/";
         }
@@ -119,7 +122,7 @@ public class QuestionController {
 
         Question question = this.questionRepository.findOne(id);
 
-        List<Answer> answers = this.answersRepository.findByQuestion(question);
+        Page<Answer> answers = this.answersRepository.findByQuestionOrderByCreationDateAsc(question, pageable);
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
         List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
 
@@ -133,7 +136,7 @@ public class QuestionController {
         model.addAttribute("categories", categories);
         model.addAttribute("categoryId", category.getId());
         model.addAttribute("view", "question/details");
-
+        model.addAttribute("size", 5);
 
         return "base-layout";
     }

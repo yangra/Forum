@@ -1,0 +1,71 @@
+<div class="row">
+    <div th:if="${answers.totalPages &gt; 1}" class="form-group col-sm-offset-5">
+        <ul class="pagination">
+            <li th:class="${answers.first == true} ? disabled">
+                <a class="pageLink" th:href="@{/question/{id}(id=${question.id}, page=0, size=${size})}">&laquo;</a>
+            </li>
+            <li th:class="${answers.first == true} ? disabled">
+                <a class="pageLink" th:classappend="${answers.first == true} ? disabled"
+                   th:href="@{/question/{id}(id=${question.id}, page=${answers.number-1}, size=${size})}">&lt;</a>
+
+            </li>
+            <th:block th:if="${answers.totalPages &lt;= 5}">
+                <li th:class="${answers.number == page} ? 'active pointer-disabled'"
+                    th:each="page : ${#numbers.sequence(0, answers.totalPages-1)}">
+                    <a class="pageLink" th:href="@{/question/{id}(id=${question.id}, page=${page}, size=${size})}"
+                       th:text="${page+1}"></a>
+                </li>
+            </th:block>
+            <th:block th:if="${answers.totalPages &gt; 5}">
+                <th:block th:if="${answers.number == 1}">
+                    <li th:class="${answers.number == page} ? 'active pointer-disabled'">
+                        <a class="pageLink" th:href="@{/question/{id}(id=${question.id}, page=0, size=${size})}">1</a>
+                    </li>
+                </th:block>
+                <th:block th:if="${answers.number == 2}">
+                    <li th:class="${answers.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(0, 1)}">
+                        <a class="pageLink" th:href="@{/question/{id}(id=${question.id}, page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${answers.number &lt; 3}">
+                    <li th:class="${answers.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(answers.number, 4)}">
+                        <a class="pageLink" th:href="@{/question/{id}(id=${question.id}, page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${answers.number &gt;= 3 AND answers.number &lt;= answers.totalPages-3}">
+                    <li th:class="${answers.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(answers.number-2, answers.number+2)}">
+                        <a class="pageLink" th:href="@{/question/{id}(id=${question.id}, page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${answers.number == answers.totalPages-2}">
+                    <li th:class="${answers.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(answers.number-3, answers.number+1)}">
+                        <a class="pageLink" th:href="@{/question/{id}(id=${question.id}, page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${answers.number == answers.totalPages-1}">
+                    <li th:class="${answers.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(answers.number-4, answers.number)}">
+                        <a class="pageLink" th:href="@{/question/{id}(id=${question.id}, page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+            </th:block>
+            <li th:class="${answers.last == true} ? disabled">
+                <a class="pageLink" th:classappend="${answers.last == true} ? disabled"
+                   th:href="@{/question/{id}(id=${question.id}, page=${answers.number + 1}, size=${size})}">&gt;</a>
+            </li>
+            <li th:class="${answers.last == true} ? disabled">
+                <a class="pageLink"
+                   th:href="@{/question/{id}(id=${question.id}, page=${answers.totalPages-1}, size=${size})}">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>

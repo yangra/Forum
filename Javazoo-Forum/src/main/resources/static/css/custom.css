@@ -50,3 +50,7 @@ ul.error{
     color: red;
     list-style-position: inside;
 }
+
+a.disabled{
+    pointer-events: none;
+}

@@ -1,0 +1,71 @@
+<div class="row">
+    <div th:if="${users.totalPages &gt; 1}" class="form-group col-sm-offset-5">
+        <ul class="pagination">
+            <li th:class="${users.first == true} ? disabled">
+                <a class="pageLink" th:href="@{/admin/users/(page=0, size=${size})}">&laquo;</a>
+            </li>
+            <li th:class="${users.first == true} ? disabled">
+                <a class="pageLink" th:classappend="${users.first == true} ? disabled"
+                   th:href="@{/admin/users/(page=${users.number-1}, size=${size})}">&lt;</a>
+
+            </li>
+            <th:block th:if="${users.totalPages &lt;= 5}">
+                <li th:class="${users.number == page} ? 'active pointer-disabled'"
+                    th:each="page : ${#numbers.sequence(0, users.totalPages-1)}">
+                    <a class="pageLink" th:href="@{/admin/users/(page=${page}, size=${size})}"
+                       th:text="${page+1}"></a>
+                </li>
+            </th:block>
+            <th:block th:if="${users.totalPages &gt; 5}">
+                <th:block th:if="${users.number == 1}">
+                    <li th:class="${users.number == page} ? 'active pointer-disabled'">
+                        <a class="pageLink" th:href="@{/admin/users/(page=0, size=${size})}">1</a>
+                    </li>
+                </th:block>
+                <th:block th:if="${users.number == 2}">
+                    <li th:class="${users.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(0, 1)}">
+                        <a class="pageLink" th:href="@{/admin/users/(page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${users.number &lt; 3}">
+                    <li th:class="${users.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(users.number, 4)}">
+                        <a class="pageLink" th:href="@{/admin/users/(page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${users.number &gt;= 3 AND users.number &lt;= users.totalPages-3}">
+                    <li th:class="${users.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(users.number-2, users.number+2)}">
+                        <a class="pageLink" th:href="@{/admin/users/(page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${users.number == users.totalPages-2}">
+                    <li th:class="${users.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(users.number-3, users.number+1)}">
+                        <a class="pageLink" th:href="@{/admin/users/(page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${users.number == users.totalPages-1}">
+                    <li th:class="${users.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(users.number-4, users.number)}">
+                        <a class="pageLink" th:href="@{/admin/users/(page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+            </th:block>
+            <li th:class="${users.last == true} ? disabled">
+                <a class="pageLink" th:classappend="${users.last == true} ? disabled"
+                   th:href="@{/admin/users/(page=${users.number + 1}, size=${size})}">&gt;</a>
+            </li>
+            <li th:class="${users.last == true} ? disabled">
+                <a class="pageLink"
+                   th:href="@{/admin/users/(page=${users.totalPages-1}, size=${size})}">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>

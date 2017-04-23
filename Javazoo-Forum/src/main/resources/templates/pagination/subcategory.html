@@ -1,0 +1,87 @@
+<div class="row">
+    <div th:if="${questions.totalPages &gt; 1}" class="form-group col-sm-offset-5">
+        <ul class="pagination">
+            <li th:class="${questions.first == true} ? disabled">
+                <a class="pageLink"
+                   th:href="@{/categories/{categoryId}/{subcategoryId}
+                   (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},page=0, size=${size})}">
+                    &laquo;
+                </a>
+            </li>
+            <li th:class="${questions.first == true} ? disabled">
+                <a class="pageLink" th:classappend="${questions.first == true} ? disabled"
+                   th:href="@{/categories/{categoryId}/{subcategoryId}
+                (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},(page=${questions.number-1}, size=${size})}">
+                    &lt;
+                </a>
+
+            </li>
+            <th:block th:if="${questions.totalPages &lt;= 5}">
+                <li th:class="${questions.number == page} ? 'active pointer-disabled'"
+                    th:each="page : ${#numbers.sequence(0, questions.totalPages-1)}">
+                    <a class="pageLink" th:href="@{/categories/{categoryId}/{subcategoryId}
+                    (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},page=${page}, size=${size})}"
+                       th:text="${page+1}"></a>
+                </li>
+            </th:block>
+            <th:block th:if="${questions.totalPages &gt; 5}">
+                <th:block th:if="${questions.number == 1}">
+                    <li th:class="${questions.number == page} ? 'active pointer-disabled'">
+                        <a class="pageLink" th:href="@{/categories/{categoryId}/{subcategoryId}
+                        (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},page=0, size=${size})}">1</a>
+                    </li>
+                </th:block>
+                <th:block th:if="${questions.number == 2}">
+                    <li th:class="${questions.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(0, 1)}">
+                        <a class="pageLink" th:href="@{/categories/{categoryId}/{subcategoryId}
+                        (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${questions.number &lt; 3}">
+                    <li th:class="${questions.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(questions.number, 4)}">
+                        <a class="pageLink" th:href="@{/categories/{categoryId}/{subcategoryId}
+                        (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${questions.number &gt;= 3 AND questions.number &lt;= questions.totalPages-3}">
+                    <li th:class="${questions.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(questions.number-2, questions.number+2)}">
+                        <a class="pageLink" th:href="@{/categories/{categoryId}/{subcategoryId}
+                        (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${questions.number == questions.totalPages-2}">
+                    <li th:class="${questions.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(questions.number-3, questions.number+1)}">
+                        <a class="pageLink" th:href="@{/categories/{categoryId}/{subcategoryId}
+                        (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${questions.number == questions.totalPages-1}">
+                    <li th:class="${questions.number == page} ? 'active pointer-disabled'"
+                        th:each="page : ${#numbers.sequence(questions.number-4, questions.number)}">
+                        <a class="pageLink" th:href="@{/categories/{categoryId}/{subcategoryId}
+                        (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},page=${page}, size=${size})}"
+                           th:text="${page+1}"></a>
+                    </li>
+                </th:block>
+            </th:block>
+            <li th:class="${questions.last == true} ? disabled">
+                <a class="pageLink" th:classappend="${questions.last == true} ? disabled"
+                   th:href="@{/categories/{categoryId}/{subcategoryId}
+                   (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},page=${questions.number + 1}, size=${size})}">&gt;</a>
+            </li>
+            <li th:class="${questions.last == true} ? disabled">
+                <a class="pageLink"
+                   th:href="@{/categories/{categoryId}/{subcategoryId}
+                   (categoryId = ${categoryId}, subcategoryId = ${subcategoryId},page=${questions.totalPages-1}, size=${size})}">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>

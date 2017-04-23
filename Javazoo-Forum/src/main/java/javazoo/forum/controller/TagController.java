@@ -1,11 +1,15 @@
 package javazoo.forum.controller;
 
 import javazoo.forum.entity.Category;
+import javazoo.forum.entity.Question;
 import javazoo.forum.entity.Tag;
 import javazoo.forum.repository.CategoryRepository;
 import javazoo.forum.repository.QuestionRepository;
 import javazoo.forum.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +42,7 @@ public class TagController {
         model.addAttribute("view", "tag/questions");
         model.addAttribute("tag", tag);
         model.addAttribute("categories",categories );
+
 
         return "base-layout";
     }
