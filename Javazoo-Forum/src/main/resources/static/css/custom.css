@@ -54,3 +54,24 @@ ul.error{
 a.disabled{
     pointer-events: none;
 }
+
+.pager li > a,
+.pager li > span {
+    background-color: #d9edf7;
+    color: #3a87ad;
+}
+
+.tag{
+    margin: 3px;
+}
+
+.tagcloud{
+    color: #3a87ad;
+}
+
+.thumbnail{
+    width: 25px;
+    border-radius: 50px;
+    padding: 0;
+    margin-bottom: 0;
+}

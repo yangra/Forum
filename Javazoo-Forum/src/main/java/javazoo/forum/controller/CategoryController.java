@@ -3,9 +3,11 @@ package javazoo.forum.controller;
 import javazoo.forum.entity.Category;
 import javazoo.forum.entity.Question;
 import javazoo.forum.entity.Subcategory;
+import javazoo.forum.entity.Tag;
 import javazoo.forum.repository.CategoryRepository;
 import javazoo.forum.repository.QuestionRepository;
 import javazoo.forum.repository.SubcategoryRepository;
+import javazoo.forum.repository.TagRepository;
 import javazoo.forum.viewModel.SubcategoryViewModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +35,9 @@ public class CategoryController {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    private TagRepository tagRepository;
+
 
     @GetMapping("categories/{id}")
     public String openCategory(@PathVariable Integer id, @PageableDefault(value = 8) Pageable pageable, Model model) {
@@ -41,12 +46,16 @@ public class CategoryController {
         List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
         Category category = this.categoryRepository.findOne(id);
         Page<Question> questions = this.questionRepository.findByCategoryOrderByCreationDateDesc(category, pageable);
+        List<Tag> allTags = this.tagRepository.findAll();
+        allTags.sort((Tag t1,Tag t2)-> t2.getQuestions().size()-t1.getQuestions().size());
+        List<Tag> tags = allTags.stream().limit(20).collect(Collectors.toList());
 
         model.addAttribute("categories", categories);
         model.addAttribute("questions", questions);
         model.addAttribute("subcategories", subcategories);
         model.addAttribute("categoryId", id);
         model.addAttribute("view", "categories/categories");
+        model.addAttribute("tags", tags);
         model.addAttribute("size", 8);
         return "base-layout";
     }
@@ -59,12 +68,16 @@ public class CategoryController {
         List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
         Subcategory subcategory = this.subcategoryRepository.findOne(subcategoryId);
         Page<Question> questions = this.questionRepository.findBySubcategoryOrderByCreationDateDesc(subcategory, pageable);
+        List<Tag> allTags = this.tagRepository.findAll();
+        allTags.sort((Tag t1,Tag t2)-> t2.getQuestions().size()-t1.getQuestions().size());
+        List<Tag> tags = allTags.stream().limit(20).collect(Collectors.toList());
 
         model.addAttribute("categories", categories);
         model.addAttribute("subcategories", subcategories);
         model.addAttribute("questions", questions);
         model.addAttribute("categoryId", categoryId);
         model.addAttribute("subcategoryId", subcategoryId);
+        model.addAttribute("tags", tags);
         model.addAttribute("view", "categories/categories");
         model.addAttribute("size", 8);
         return "base-layout";

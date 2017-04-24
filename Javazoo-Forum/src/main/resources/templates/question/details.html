@@ -11,6 +11,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="col-md-2" style="border-right: 1px solid lightgray">
+                            <img class="thumbnail" th:src="${question.author.imagePath}" alt="User Image"/>
                             <span th:text="${question.author.username}"></span><br/>
                             <span th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
                         </div>
@@ -28,7 +29,7 @@
                                 </th:block>
                             </div>
 
-                            <div class="col-md-5">
+                            <div class="col-sm-4">
                                 <p th:if="${!question.tags.isEmpty()}">
                                 Tags:
                                     <a class="btn btn-default btn-xs" th:each="tag:${question.tags}"
@@ -36,33 +37,29 @@
                                 </p>
                             </div>
 
-                            <div class="col-md-5">
+                            <div class="col-sm-4">
                                 <a th:href="@{/categories/{categoryId}/{subcategoryId}
                                         (categoryId = ${question.category.id}, subcategoryId = ${question.subcategory.id})}">
                                     <span th:text="${question.subcategory.name}"></span>
                                 </a>
+                            </div>
+                            <div class="col-sm-2 pull-right">
+                                <th:block sec:authorize="isAuthenticated()" th:if="${user.isAdmin() OR user.isAuthor(question)}">
+                                    <a class="btn btn-success btn-xs" th:href="@{/question/edit/{id}(id = ${question.id})}">Edit</a>
+                                    <a class="btn btn-danger btn-xs" th:href="@{/question/delete/{id}(id = ${question.id})}">Delete</a>
+                                </th:block>
                             </div>
                         </div>
                     </div>
                 </div>
             </article>
 
-
-            <div class="pull-right">
-                <th:block sec:authorize="isAuthenticated()" th:if="${user.isAdmin() OR user.isAuthor(question)}">
-                    <a class="btn btn-success btn-xs" th:href="@{/question/edit/{id}(id = ${question.id})}">Edit</a>
-                    <a class="btn btn-danger btn-xs" th:href="@{/question/delete/{id}(id = ${question.id})}">Delete</a>
-                </th:block>
-            </div>
-
-            <br/>
-            <br/>
-
             <div class="col-sm-9 col-md-offset-2">
                 <th:block th:each="answer:${answers}">
                     <div class="panel panel-primary">
                         <div class="panel-body">
                             <div class="col-sm-2" style="border-right: 1px solid lightgray">
+                                <img class="thumbnail" th:src="${answer.author.imagePath}" alt="User Image"/>
                                 <span th:text="${answer.author.username}"></span><br/>
                                 <span th:text="${#dates.format(answer.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
                             </div>

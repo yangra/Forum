@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class TagController {
 
     @Autowired
     private TagRepository tagRepository;
+
     @Autowired
     private QuestionRepository questionRepository;
 
@@ -39,8 +41,13 @@ public class TagController {
 
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
 
+        List<Tag> allTags = this.tagRepository.findAll();
+        allTags.sort((Tag t1,Tag t2)-> t2.getQuestions().size()-t1.getQuestions().size());
+        List<Tag> tags = allTags.stream().limit(20).collect(Collectors.toList());
+
         model.addAttribute("view", "tag/questions");
         model.addAttribute("tag", tag);
+        model.addAttribute("tags", tags);
         model.addAttribute("categories",categories );
 
 

@@ -129,12 +129,17 @@ public class QuestionController {
         Subcategory subcategory = question.getSubcategory();
         Category category = subcategory.getCategory();
 
+        List<Tag> allTags = this.tagRepository.findAll();
+        allTags.sort((Tag t1,Tag t2)-> t2.getQuestions().size()-t1.getQuestions().size());
+        List<Tag> tags = allTags.stream().limit(20).collect(Collectors.toList());
+
         model.addAttribute("question", question);
         model.addAttribute("answers", answers);
         model.addAttribute("subcategoryId", subcategory.getId());
         model.addAttribute("subcategories", subcategories);
         model.addAttribute("categories", categories);
         model.addAttribute("categoryId", category.getId());
+        model.addAttribute("tags",  tags);
         model.addAttribute("view", "question/details");
         model.addAttribute("size", 5);
 

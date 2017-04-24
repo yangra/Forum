@@ -1,0 +1,12 @@
+<div>
+    <h4 class="tagcloud">Tag Cloud</h4>
+    <ul class="pager">
+        <th:block th:each="tag:${tags}">
+            <li>
+                <a th:href="'/tag/'+${tag.name}" class="tag" >
+                    <span th:text="${tag.name}"></span>
+                </a>
+            </li>
+        </th:block>
+    </ul>
+</div>

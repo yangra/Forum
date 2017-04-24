@@ -9,10 +9,10 @@
                            class="list-group-item list-group-item-info" data-toggle="collapse" data-parent="MainMenu">
                             <span th:text="${category.name}"></span>
                         </a>
-
                     </th:block>
                 </div>
             </div>
+            <span th:include="fragments/tagCloud"></span>
         </aside>
         <section class="col-md-9 container body-content">
             <div class="row">
@@ -40,18 +40,17 @@
                                     </div>
                                     <div class="col-md-4 ">
                                         Created by:<br/>
+                                        <img class="thumbnail" th:src="${question.author.imagePath}" alt="User Image"/>
                                         <span th:text="${question.author.username}"></span><br/>
                                         <span th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
                                     </div>
                                     <div class="col-md-4 ">
-
                                         <th:block th:if="${question.lastAnswer!= null}">
                                             Last activity:<br/>
+                                            <img class="thumbnail" th:src="${question.lastAnswer.author.imagePath}" alt="User Image"/>
                                             <span th:text="${question.lastAnswer.author.username}"></span><br/>
                                             <span th:text="${#dates.format(question.lastAnswer.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
-
                                         </th:block>
-
                                     </div>
                                 </div>
                             </div>

@@ -26,13 +26,18 @@
                                     </div>
                                     <div class="col-md-4 ">
                                         Created by:<br/>
+                                        <img class="thumbnail" th:src="${question.author.imagePath}" alt="User Image"/>
                                         <span th:text="${question.author.username}"></span><br/>
                                         <span th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
                                     </div>
+
                                     <div class="col-md-4 ">
-                                        Last activity:<br/>
-                                        <span th:text="${question.lastAnswer.author.username}"></span> <br/>
-                                        <span th:text="${#dates.format(question.lastAnswer.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
+                                        <th:block th:if="${question.lastAnswer!= null}">
+                                            Last activity:<br/>
+                                            <img class="thumbnail" th:src="${question.lastAnswer.author.imagePath}" alt="User Image"/>
+                                            <span th:text="${question.lastAnswer.author.username}"></span> <br/>
+                                            <span th:text="${#dates.format(question.lastAnswer.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
+                                        </th:block>
                                     </div>
                                 </div>
                             </div>
@@ -40,7 +45,7 @@
                     </div>
                 </th:block>
             </div>
-           <span th:include="${subcategoryId} ? 'pagination/subcategory' : 'pagination/category'"></span>
+            <span th:include="${subcategoryId} ? 'pagination/subcategory' : 'pagination/category'"></span>
         </section>
     </div>
 </main>
