@@ -5,47 +5,33 @@ Categories
  
  
 Question 
-	Questions - sorted by date
-	*Announcements Closed questions
-	Admin tools for Questions - ^Edit, ^Delete, Lock Sticky
-	Search by tag
-	!!! add DEFAULT category!
-	Show by category 
+	^Questions - sorted by date
+	^Admin tools for Questions - ^Edit, ^Delete
+	^Search by tag
+	^Show by category 
 
 Answers
-	^Editing and *Quoting
-	*Report offensive or unwelcome post
+	^Editing
 	^Admin tools for Posts - Edit, Delete
 
 Members
-	^Member profiles - edit, add Avatar/Picture, *delete profile?
-	*Member List with Search Tool
-	*Member Post Search
-	*Points System - Receive Points for Posting New Topics, Replies, proposing a Answer
-	*Buddy List
+	^Member profiles - edit, add Avatar/Picture
+
 
 Member profiles
 	^Editable member profile
 	^Member Avatar
 	^Member Information
-	Contact information - Email
-	Active Statistics - ^Join Date, Last Visit, Number of Posts
-	^Password changes require current password
-	**Signature - personal message
+	^Contact information - Email
+	Active Statistics - ^Join Date, Number of Posts
+	^Password changes 
 
 Forum Administration 
 	^Create, Edit or Delete unlimited number of Categories and Questions
-	*Arrange the order of Categories and can also suspend members
-
-*Moderation
-	*Moderators can hide suspect Topics and Posts from other members
-	*Moderator permissions - Moderators can Edit and Delete Topics and Posts, 
-
-Security
-	*User permission system - Email Address banning
+	^Arrange the order of Categories
+ 
 	
-- Pagination
+- ^Pagination
 - ^Colors of the Edit and Delete buttons
-- Flash messages when illegal content is entered in all forms
-- mark the required fields in the forms
-- Validateion for empty fields of title or content
+- ^Flash messages when illegal content is entered in all forms
+- ^Validateion for empty fields of title or content
