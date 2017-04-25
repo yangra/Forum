@@ -14,8 +14,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,11 +45,15 @@ public class HomeController {
         allTags.sort((Tag t1,Tag t2)-> t2.getQuestions().size()-t1.getQuestions().size());
         List<Tag> tags = allTags.stream().limit(20).collect(Collectors.toList());
 
+
+
         model.addAttribute("view", "home/index");
         model.addAttribute("questions", questions);
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
         model.addAttribute("size", 5);
+
+
         return "base-layout";
     }
 
@@ -56,4 +63,6 @@ public class HomeController {
 
         return "base-layout";
     }
+
+
 }
