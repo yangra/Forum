@@ -5,14 +5,16 @@
                 <fieldset>
                     <legend>Profile</legend>
                     <div class="col-sm-4">
-                        <img th:src="${user.imagePath}" alt="User Image"/>
+                        <img class="img-thumbnail" width="250" th:src="${user.imagePath}" alt="User Image"/>
                         <p></p>
                         <label class="control-label">User created on:</label>
-                        <span th:text="${#dates.format(user.creationDate, 'dd.MM.yyyy HH:mm:ss')}"></span>
+                        <span th:text="${#dates.format(user.creationDate, 'dd-MM-yyyy')}"></span>
                         <p></p>
                         <label class="control-label">Questions:</label>
+                        <span th:text="${user.questions}"></span>
                         <p></p>
                         <label class="control-label">Answers:</label>
+                        <span th:text="${user.answers}"></span>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
