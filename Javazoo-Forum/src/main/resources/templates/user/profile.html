@@ -10,11 +10,9 @@
                         <label class="control-label">User created on:</label>
                         <span th:text="${#dates.format(user.creationDate, 'dd-MM-yyyy')}"></span>
                         <p></p>
-                        <label class="control-label">Questions:</label>
-                        <span th:text="${user.questions}"></span>
+                        <a href="#">Questions: <span class="badge"  th:text="${user.questions.size()}"></span></a>
                         <p></p>
-                        <label class="control-label">Answers:</label>
-                        <span th:text="${user.answers}"></span>
+                        <a href="#">Answers: <span class="badge"  th:text="${user.answers.size()}"></span></a>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
