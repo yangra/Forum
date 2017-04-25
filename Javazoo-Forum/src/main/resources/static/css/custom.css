@@ -75,3 +75,35 @@ a.disabled{
     padding: 0;
     margin-bottom: 0;
 }
+
+.questionInfo{
+    font-weight: 600;
+    font-size: 87%;
+}
+
+.dateInfo{
+    font-weight: 600;
+    font-size: 65%;
+}
+
+.label-default {
+    background-color: #999999;
+    border-radius: .40em;
+    font-size: 65%;
+}
+.label-default[href]:hover,
+.label-default[href]:focus {
+    background-color: #bbbbbb;
+}
+
+.categoryInfo{
+    padding-bottom: 8px;
+    display:block;
+}
+
+.answerInfo{
+    padding-top: 8px;
+    display: block;
+    font-size:75%;
+    font-weight: bold;
+}

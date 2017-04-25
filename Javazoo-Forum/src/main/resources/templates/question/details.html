@@ -3,26 +3,26 @@
 
         <aside th:include="fragments/aside"></aside>
 
-        <section class="col-sm-8 col-md-offset-1">
+        <section class="col-sm-8 col-sm-offset-1">
             <article>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title" th:text="${question.title}"></h3>
                     </div>
                     <div class="panel-body">
-                        <div class="col-md-2" style="border-right: 1px solid lightgray">
+                        <div class="col-sm-2" style="border-right: 1px solid lightgray">
                             <img class="thumbnail" th:src="${question.author.imagePath}" alt="User Image"/>
-                            <span th:text="${question.author.username}"></span><br/>
-                            <span th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
+                            <span class="questionInfo" th:text="${question.author.username}"></span><br/>
+                            <span class="dateInfo" th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
                         </div>
-                        <div class="col-md-10">
+                        <div class="col-sm-10">
                             <p th:text="${question.content}"></p>
                         </div>
 
                     </div>
                     <div class="panel-footer">
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-sm-2">
                                 <th:block sec:authorize="isAuthenticated()">
                                     <a class="btn btn-warning btn-sm"
                                        th:href="@{/question/{qId}/answer/create(qId=${question.id})}">Answer &raquo;</a>
@@ -31,8 +31,7 @@
 
                             <div class="col-sm-4">
                                 <p th:if="${!question.tags.isEmpty()}">
-                                Tags:
-                                    <a class="btn btn-default btn-xs" th:each="tag:${question.tags}"
+                                    <a class="label label-default" th:each="tag:${question.tags}"
                                        th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>
                                 </p>
                             </div>
@@ -40,13 +39,13 @@
                             <div class="col-sm-4">
                                 <a th:href="@{/categories/{categoryId}/{subcategoryId}
                                         (categoryId = ${question.category.id}, subcategoryId = ${question.subcategory.id})}">
-                                    <span th:text="${question.subcategory.name}"></span>
+                                    <span class="categoryInfo" th:text="${question.subcategory.name}"></span>
                                 </a>
                             </div>
                             <div class="col-sm-2 pull-right">
                                 <th:block sec:authorize="isAuthenticated()" th:if="${user.isAdmin() OR user.isAuthor(question)}">
-                                    <a class="btn btn-success btn-xs" th:href="@{/question/edit/{id}(id = ${question.id})}">Edit</a>
-                                    <a class="btn btn-danger btn-xs" th:href="@{/question/delete/{id}(id = ${question.id})}">Delete</a>
+                                    <a class="btn btn-info btn-xs" th:href="@{/question/edit/{id}(id = ${question.id})}">Edit</a>
+                                    <a class="btn btn-primary btn-xs" th:href="@{/question/delete/{id}(id = ${question.id})}">Delete</a>
                                 </th:block>
                             </div>
                         </div>
@@ -54,25 +53,25 @@
                 </div>
             </article>
 
-            <div class="col-sm-9 col-md-offset-2">
+            <div class="col-sm-11 col-sm-offset-1">
                 <th:block th:each="answer:${answers}">
                     <div class="panel panel-primary">
                         <div class="panel-body">
                             <div class="col-sm-2" style="border-right: 1px solid lightgray">
                                 <img class="thumbnail" th:src="${answer.author.imagePath}" alt="User Image"/>
-                                <span th:text="${answer.author.username}"></span><br/>
-                                <span th:text="${#dates.format(answer.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
+                                <span class="questionInfo" th:text="${answer.author.username}"></span><br/>
+                                <span class="dateInfo" th:text="${#dates.format(answer.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
                             </div>
-                            <article class="col-sm-9">
+                            <article class="col-sm-10">
                                 <span th:text="${answer.content}"></span><br/>
                             </article>
 
                             <div class="pull-right">
                                 <th:block sec:authorize="isAuthenticated()"
                                           th:if="${user.isAdmin() OR user.isAuthor(answer)}">
-                                    <a class="btn btn-success btn-xs"
+                                    <a class="btn btn-info btn-xs"
                                        th:href="@{/question/{qId}/answer/edit/{id}(id = ${answer.id}, qId = ${question.id})}">Edit</a>
-                                    <a class="btn btn-danger btn-xs"
+                                    <a class="btn btn-primary btn-xs"
                                        th:href="@{/question/{qId}/answer/delete/{id}(id = ${answer.id}, qId = ${question.id})}">Delete</a>
                                 </th:block>
                             </div>

@@ -18,25 +18,25 @@
                                     <div class="col-md-4">
                                         <a th:href="@{/categories/{categoryId}/{subcategoryId}
                                         (categoryId = ${question.category.id}, subcategoryId = ${question.subcategory.id})}">
-                                            <span th:text="${question.subcategory.name}"></span>
+                                            <span class="categoryInfo" th:text="${question.subcategory.name}"></span>
                                         </a>
-                                        <br/><br/>
-                                        Answers:
-                                        <span th:text="${question.answers.size()}"></span>
+                                        <span class="answerInfo">Answers:
+                                            <span th:text="${question.answers.size()}"></span>
+                                        </span>
                                     </div>
                                     <div class="col-md-4 ">
-                                        Created by:<br/>
+                                        <span class="questionInfo">Created by:</span><br/>
                                         <img class="thumbnail" th:src="${question.author.imagePath}" alt="User Image"/>
-                                        <span th:text="${question.author.username}"></span><br/>
-                                        <span th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
+                                        <span class="questionInfo" th:text="${question.author.username}"></span><br/>
+                                        <span class="dateInfo" th:text="${#dates.format(question.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
                                     </div>
 
                                     <div class="col-md-4 ">
                                         <th:block th:if="${question.lastAnswer!= null}">
-                                            Last activity:<br/>
+                                            <span class="questionInfo">Last activity:</span><br/>
                                             <img class="thumbnail" th:src="${question.lastAnswer.author.imagePath}" alt="User Image"/>
-                                            <span th:text="${question.lastAnswer.author.username}"></span> <br/>
-                                            <span th:text="${#dates.format(question.lastAnswer.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
+                                            <span class="questionInfo" th:text="${question.lastAnswer.author.username}"></span> <br/>
+                                            <span class="dateInfo" th:text="${#dates.format(question.lastAnswer.creationDate, 'dd-MM-yyyy HH:mm:ss')}"></span>
                                         </th:block>
                                     </div>
                                 </div>
