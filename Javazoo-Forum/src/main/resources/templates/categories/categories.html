@@ -20,6 +20,9 @@
                                         (categoryId = ${question.category.id}, subcategoryId = ${question.subcategory.id})}">
                                             <span class="categoryInfo" th:text="${question.subcategory.name}"></span>
                                         </a>
+                                        <a class="label label-default" th:each="tag:${question.tags}"
+                                           th:href="@{/tag/{id}(id=${tag.id})}" th:text="${tag.name}"></a>
+                                        <br/>
                                         <span class="answerInfo">Answers:
                                             <span th:text="${question.answers.size()}"></span>
                                         </span>

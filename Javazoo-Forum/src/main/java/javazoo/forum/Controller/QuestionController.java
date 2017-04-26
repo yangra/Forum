@@ -87,7 +87,7 @@ public class QuestionController {
         User userEntity = this.userRepository.findByUsername(user.getUsername());
         Category category = this.categoryRepository.findOne(questionBindingModel.getCategoryId());
         Subcategory subcategory = this.subcategoryRepository.findOne(questionBindingModel.getSubcategoryId());
-        HashSet<Tag> tags= this.findTagsFromString(questionBindingModel.getTagString());
+        List<Tag> tags= this.findTagsFromString(questionBindingModel.getTagString());
 
         Question questionEntity = new Question(
                         questionBindingModel.getTitle(),
@@ -198,7 +198,7 @@ public class QuestionController {
         Category category = this.categoryRepository.findOne(questionBindingModel.getCategoryId());
         Subcategory subcategory = this.subcategoryRepository.findOne(questionBindingModel.getSubcategoryId());
 
-        HashSet<Tag> tags = this.findTagsFromString(questionBindingModel.getTagString());
+        List<Tag> tags = this.findTagsFromString(questionBindingModel.getTagString());
 
         question.setContent(questionBindingModel.getContent());
         question.setTitle(questionBindingModel.getTitle());
@@ -265,11 +265,11 @@ public class QuestionController {
         return userEntity.isAdmin() || userEntity.isAuthor(question);
     }
 
-    private HashSet<Tag> findTagsFromString(String tagString){
+    private List<Tag> findTagsFromString(String tagString){
 
         if ("".equals(tagString)) return null;
 
-        HashSet<Tag> tags = new HashSet<>();
+        List<Tag> tags = new ArrayList<>();
 
         String[] tagNames = tagString.split("[,\\s]+");
 
