@@ -30,10 +30,10 @@ public class TagController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping("/tag/{name}")
-    public String questionsWithTag( Model model, @PathVariable String name){
+    @GetMapping("/tag/{id}")
+    public String questionsWithTag( Model model, @PathVariable Integer id){
 
-        Tag tag = this.tagRepository.findByName(name);
+        Tag tag = this.tagRepository.findOne(id);
 
         if(tag==null){
             return "redirect:/";

@@ -32,7 +32,7 @@
                             <div class="col-sm-4">
                                 <p th:if="${!question.tags.isEmpty()}">
                                     <a class="label label-default" th:each="tag:${question.tags}"
-                                       th:href="@{/tag/{name}(name=${tag.name})}" th:text="${tag.name}"></a>
+                                       th:href="@{/tag/{id}(id=${tag.id})}" th:text="${tag.name}"></a>
                                 </p>
                             </div>
 

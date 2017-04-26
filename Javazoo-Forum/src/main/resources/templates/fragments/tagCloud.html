@@ -3,7 +3,7 @@
     <ul class="pager">
         <th:block th:each="tag:${tags}">
             <li>
-                <a th:href="'/tag/'+${tag.name}" class="tag" >
+                <a th:href="'/tag/'+${tag.id}" class="tag" >
                     <span th:text="${tag.name}"></span>
                 </a>
             </li>
