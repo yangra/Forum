@@ -1,4 +1,4 @@
-package javazoo.forum.Controller;
+package javazoo.forum.controller;
 
 import javazoo.forum.bindingModel.UserBindingModel;
 import javazoo.forum.bindingModel.UserEditBindingModel;
@@ -41,10 +41,10 @@ import java.util.UUID;
 public class UserController {
 
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @GetMapping("/register")
     public String register(Model model) {
@@ -121,6 +121,7 @@ public class UserController {
     }
 
     @GetMapping("/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String editProfile(@PathVariable Integer id, Model model) {
 
         User user = this.userRepository.findOne(id);
@@ -143,10 +144,9 @@ public class UserController {
 
         User user = this.userRepository.findByUsername(principal.getUsername());
 
-
         List<String> errors = new ArrayList<>();
 
-        String databaseImagePath = "/images/default.png";
+        String databaseImagePath = user.getImagePath();
 
         String[] allowedContentTypes = {
                 "image/png",
@@ -171,12 +171,12 @@ public class UserController {
                 userBindingModel.getImage().transferTo(imageFile);
                 // set the user profile to the new image
                 databaseImagePath = "/images/" + filename;
-                if(databaseImagePath != "/images/default.png"){
+                if(!user.getImagePath().equals("/images/default.png")){
                     String fname = user.getImagePath().split("/")[2];
                     Path target = getPath().resolve( getPath() + "/" + fname);
                     Files.delete(target);}
             } catch (IOException e) {
-                errors.add(e.getMessage());
+                errors.add("There was an error while trying to upload your image!");
             }
 
 
