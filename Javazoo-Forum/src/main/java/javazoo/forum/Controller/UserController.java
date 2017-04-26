@@ -1,4 +1,4 @@
-package javazoo.forum.controller;
+package javazoo.forum.Controller;
 
 import javazoo.forum.bindingModel.UserBindingModel;
 import javazoo.forum.bindingModel.UserEditBindingModel;
@@ -7,6 +7,9 @@ import javazoo.forum.entity.User;
 import javazoo.forum.repository.RoleRepository;
 import javazoo.forum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,9 +28,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @Transactional
@@ -50,7 +58,6 @@ public class UserController {
 
         List<String> errors = validateRegisterFields(userBindingModel);
         if (!errors.isEmpty()) {
-
             model.addAttribute("errors", errors);
             model.addAttribute("username", userBindingModel.getUsername());
             model.addAttribute("email", userBindingModel.getEmail());
@@ -58,7 +65,6 @@ public class UserController {
             model.addAttribute("view", "user/register");
             return "base-layout";
         }
-
 
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -128,6 +134,7 @@ public class UserController {
     @PostMapping("/edit/{id}")
     public String editProfileProcess(@PathVariable Integer id,
                                      UserEditBindingModel userBindingModel,
+
                                      RedirectAttributes redirectAttributes) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication()
@@ -155,11 +162,14 @@ public class UserController {
             String savePath = imagePath + filename;
             File imageFile = new File(savePath);
             try {
+                // copy the new file to the images folder
                 userBindingModel.getImage().transferTo(imageFile);
+                // set the user profile to the new image
                 databaseImagePath = "/images/" + filename;
             } catch (IOException e) {
                 errors.add(e.getMessage());
             }
+
         } else if (!userBindingModel.getImage().getOriginalFilename().equals("") && !isContentTypeAllowed) {
             errors.add("The file you tried to upload is not an image!");
         }
@@ -253,5 +263,48 @@ public class UserController {
         return errors;
     }
 
+    @GetMapping("/images/{filename:.+}")
+    @ResponseBody
+    public ResponseEntity<Resource> serverFile(@PathVariable String filename, Model model){
 
+        try{
+            Resource file = loadAsResource(filename);
+            return ResponseEntity
+                    .ok()
+                    .body(file);
+        }catch(Exception e){
+            model.addAttribute("message", e.getMessage());
+            return null;
+        }
+    }
+
+    private Resource loadAsResource(String filename) throws Exception {
+
+        Path file = getPath().resolve(filename);
+        Resource resource = new UrlResource(file.toUri());
+        if(resource.exists() || resource.isReadable()) {
+            return resource;
+        }
+        return null;
+    }
+
+    private Path getPath() throws IOException{
+        Path path = Paths.get( new File(".").getCanonicalPath() +"/src/main/resources/static/images/");
+        return path;
+    }
+
+    private String uploadFile( MultipartFile file) throws IOException {
+        if (!file.isEmpty()) {
+            String type = file.getContentType();
+            String suffix = "." + type.split("/")[1];
+            String fileName = UUID.randomUUID().toString() + suffix;
+
+            Files.copy(file.getInputStream(), getPath().resolve(fileName));
+
+            String requestPath = "/images/";
+            return requestPath + fileName;
+
+        }
+        return null;
+    }
 }
