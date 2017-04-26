@@ -64,5 +64,10 @@ public class HomeController {
         return "base-layout";
     }
 
+    @RequestMapping("/error/500")
+    public String witheError(Model model) {
+        model.addAttribute("view", "error/500");
 
+        return "base-layout";
+    }
 }
