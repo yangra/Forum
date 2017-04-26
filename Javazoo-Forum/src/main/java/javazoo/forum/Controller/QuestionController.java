@@ -22,10 +22,10 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
-@Transactional
 public class QuestionController {
 
     @Autowired
@@ -242,8 +242,16 @@ public class QuestionController {
             return "redirect:/question/" + id;
         }
 
+        question.getTags().removeAll(question.getTags());
+
         this.questionRepository.delete(question);
 
+        List<Tag> tags = this.tagRepository.findAll();
+        for(Tag tag:tags){
+            if(tag.getQuestions().isEmpty()){
+                this.tagRepository.delete(tag);
+            }
+        }
         return "redirect:/";
     }
 
