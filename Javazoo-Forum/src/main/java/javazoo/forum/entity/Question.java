@@ -3,9 +3,7 @@ package javazoo.forum.entity;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name="questions")
@@ -19,10 +17,10 @@ public class Question {
     private Set<Answer> answers;
     private Category category;
     private Subcategory subcategory;
-    private  Set<Tag> tags;
+    private List<Tag> tags;
 
     public Question(String title, String content, User author, Category category,
-                    Subcategory subcategory, HashSet<Tag>tags){
+                    Subcategory subcategory, List<Tag>tags){
         this.title = title;
         this.content = content;
         this.author = author;
@@ -36,6 +34,7 @@ public class Question {
 
     public Question(){
         this.answers = new HashSet<>();
+        this.tags = new ArrayList<>();
     }
 
     @Id
@@ -127,11 +126,11 @@ public class Question {
 
     @ManyToMany()
     @JoinColumn(table = "questions_tags")
-    public Set<Tag> getTags() {
+    public List<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(Set<Tag> tags) {
+    public void setTags(List<Tag> tags) {
         this.tags = tags;
     }
 
