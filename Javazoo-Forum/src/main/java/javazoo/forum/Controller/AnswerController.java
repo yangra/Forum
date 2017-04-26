@@ -160,10 +160,21 @@ public class AnswerController {
         Answer answer = this.answersRepository.findOne(id);
 
 
+
         if(!isUserAuthorOrAdmin(answer)){
             return "redirect:/question/"+qId;
         }
 
+        Question question = answer.getQuestion();
+        if(question.getLastAnswer().getId() == answer.getId()){
+            List<Answer> answers = this.answersRepository.findByQuestionOrderByCreationDateAsc(question);
+            if(answers.size()>1){
+                question.setLastAnswer(answers.get(answers.size()-2));
+            }else{
+                question.setLastAnswer(null);
+            }
+        }
+        this.questionRepository.saveAndFlush(question);
         this.answersRepository.delete(answer);
 
         return "redirect:/question/{qId}";

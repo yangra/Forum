@@ -11,4 +11,5 @@ import java.util.List;
 
 public interface AnswersRepository extends JpaRepository<Answer, Integer>{
     Page<Answer> findByQuestionOrderByCreationDateAsc(Question question, Pageable pageable);
+    List<Answer> findByQuestionOrderByCreationDateAsc(Question question);
 }
