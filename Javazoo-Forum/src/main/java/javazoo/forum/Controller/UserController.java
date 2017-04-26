@@ -132,9 +132,10 @@ public class UserController {
     }
 
     @PostMapping("/edit/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String editProfileProcess(@PathVariable Integer id,
+//                                     @RequestParam("file") MultipartFile file,
                                      UserEditBindingModel userBindingModel,
-
                                      RedirectAttributes redirectAttributes) {
         UserDetails principal = (UserDetails) SecurityContextHolder.getContext()
                 .getAuthentication()
@@ -158,7 +159,11 @@ public class UserController {
 
         if (!userBindingModel.getImage().getOriginalFilename().equals("") && isContentTypeAllowed) {
             String imagePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\";
-            String filename = userBindingModel.getImage().getOriginalFilename();
+            // get the file type
+            String type = userBindingModel.getImage().getContentType();
+            // get only the file extension
+            String suffix = "." + type.split("/")[1];
+            String filename = UUID.randomUUID().toString() + suffix;
             String savePath = imagePath + filename;
             File imageFile = new File(savePath);
             try {
@@ -291,20 +296,5 @@ public class UserController {
     private Path getPath() throws IOException{
         Path path = Paths.get( new File(".").getCanonicalPath() +"/src/main/resources/static/images/");
         return path;
-    }
-
-    private String uploadFile( MultipartFile file) throws IOException {
-        if (!file.isEmpty()) {
-            String type = file.getContentType();
-            String suffix = "." + type.split("/")[1];
-            String fileName = UUID.randomUUID().toString() + suffix;
-
-            Files.copy(file.getInputStream(), getPath().resolve(fileName));
-
-            String requestPath = "/images/";
-            return requestPath + fileName;
-
-        }
-        return null;
     }
 }
