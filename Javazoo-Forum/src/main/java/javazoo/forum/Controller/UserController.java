@@ -171,9 +171,15 @@ public class UserController {
                 userBindingModel.getImage().transferTo(imageFile);
                 // set the user profile to the new image
                 databaseImagePath = "/images/" + filename;
+                if(databaseImagePath != "/images/default.png"){
+                    String fname = user.getImagePath().split("/")[2];
+                    Path target = getPath().resolve( getPath() + "/" + fname);
+                    Files.delete(target);}
             } catch (IOException e) {
                 errors.add(e.getMessage());
             }
+
+
 
         } else if (!userBindingModel.getImage().getOriginalFilename().equals("") && !isContentTypeAllowed) {
             errors.add("The file you tried to upload is not an image!");
