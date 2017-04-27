@@ -36,10 +36,10 @@ public class HomeController {
     private TagRepository tagRepository;
 
     @GetMapping("/")
-    public String index(@PageableDefault(value = 5) Pageable pageable, Model model){
+    public String index(@PageableDefault(value = 6) Pageable pageable, Model model){
 
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
-        Page<Question> questions = this.questionRepository.findAllByOrderByCreationDateDesc(pageable);
+        Page<Question> questions = this.questionRepository.findAllByOrderByCreationDateDescLastAnswerDesc(pageable);
 
         List<Tag> allTags = this.tagRepository.findAll();
         allTags.sort((Tag t1,Tag t2)-> t2.getQuestions().size()-t1.getQuestions().size());
@@ -51,7 +51,7 @@ public class HomeController {
         model.addAttribute("questions", questions);
         model.addAttribute("categories", categories);
         model.addAttribute("tags", tags);
-        model.addAttribute("size", 5);
+        model.addAttribute("size", 6);
 
 
         return "base-layout";

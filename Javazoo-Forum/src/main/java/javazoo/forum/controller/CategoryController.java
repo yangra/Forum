@@ -40,12 +40,12 @@ public class CategoryController {
 
 
     @GetMapping("categories/{id}")
-    public String openCategory(@PathVariable Integer id, @PageableDefault(value = 8) Pageable pageable, Model model) {
+    public String openCategory(@PathVariable Integer id, @PageableDefault(value = 6) Pageable pageable, Model model) {
 
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
         List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
         Category category = this.categoryRepository.findOne(id);
-        Page<Question> questions = this.questionRepository.findByCategoryOrderByCreationDateDesc(category, pageable);
+        Page<Question> questions = this.questionRepository.findByCategoryOrderByCreationDateDescLastAnswerDesc(category, pageable);
         List<Tag> allTags = this.tagRepository.findAll();
         allTags.sort((Tag t1,Tag t2)-> t2.getQuestions().size()-t1.getQuestions().size());
         List<Tag> tags = allTags.stream().limit(20).collect(Collectors.toList());
@@ -56,18 +56,18 @@ public class CategoryController {
         model.addAttribute("categoryId", id);
         model.addAttribute("view", "categories/categories");
         model.addAttribute("tags", tags);
-        model.addAttribute("size", 8);
+        model.addAttribute("size", 6);
         return "base-layout";
     }
 
     @GetMapping("categories/{categoryId}/{subcategoryId}")
-    public String openSubCategory(@PathVariable Integer categoryId, @PageableDefault(value = 8) Pageable pageable,
+    public String openSubCategory(@PathVariable Integer categoryId, @PageableDefault(value = 6) Pageable pageable,
                                   @PathVariable Integer subcategoryId, Model model) {
 
         List<Category> categories = this.categoryRepository.findAllByOrderByOrderNoAsc();
         List<Subcategory> subcategories = this.subcategoryRepository.findAllByOrderByOrderNoAsc();
         Subcategory subcategory = this.subcategoryRepository.findOne(subcategoryId);
-        Page<Question> questions = this.questionRepository.findBySubcategoryOrderByCreationDateDesc(subcategory, pageable);
+        Page<Question> questions = this.questionRepository.findBySubcategoryOrderByCreationDateDescLastAnswerDesc(subcategory, pageable);
         List<Tag> allTags = this.tagRepository.findAll();
         allTags.sort((Tag t1,Tag t2)-> t2.getQuestions().size()-t1.getQuestions().size());
         List<Tag> tags = allTags.stream().limit(20).collect(Collectors.toList());
@@ -79,7 +79,7 @@ public class CategoryController {
         model.addAttribute("subcategoryId", subcategoryId);
         model.addAttribute("tags", tags);
         model.addAttribute("view", "categories/categories");
-        model.addAttribute("size", 8);
+        model.addAttribute("size", 6);
         return "base-layout";
     }
 

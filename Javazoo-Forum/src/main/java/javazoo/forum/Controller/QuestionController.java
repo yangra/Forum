@@ -104,7 +104,7 @@ public class QuestionController {
     }
 
     @GetMapping("/question/{id}")
-    public String details(Model model, @PathVariable Integer id, @PageableDefault(value = 5) Pageable pageable){
+    public String details(Model model, @PathVariable Integer id, @PageableDefault(value = 6) Pageable pageable){
         if (!this.questionRepository.exists(id)){
             return "redirect:/";
         }
@@ -141,7 +141,7 @@ public class QuestionController {
         model.addAttribute("categoryId", category.getId());
         model.addAttribute("tags",  tags);
         model.addAttribute("view", "question/details");
-        model.addAttribute("size", 5);
+        model.addAttribute("size", 6);
 
         return "base-layout";
     }
