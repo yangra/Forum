@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @Transactional
@@ -174,6 +175,7 @@ public class AnswerController {
                 question.setLastAnswer(null);
             }
         }
+
         this.questionRepository.saveAndFlush(question);
         this.answersRepository.delete(answer);
 
